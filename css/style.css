@@ -22,21 +22,88 @@ body {
     line-height: 1.6;
     color: var(--text-dark);
 }
+/*==========================*/
 
-/* Navigation Customization */
-.navbar-brand {
+/* Navigation Styles for Horizontal Layout */
+nav {
+    padding: 1rem 2rem;
+    box-shadow: var(--shadow);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a[href="#"] {
+    font-size: 2.5rem;
     font-weight: bold;
-    font-size: 1.5rem;
+    color: var();
+    text-decoration: none;
 }
 
-.navbar-nav .nav-link {
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    align-items:center;
+}
+
+nav ul li a {
+    color: var(--primary-color);
+    text-decoration: none;
+    padding: 0.5rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
     font-weight: 500;
-    transition: color 0.3s ease;
 }
 
-.navbar-nav .nav-link:hover {
-    color: var(--secondary-color) !important;
+nav ul li a:hover {
+    background-color: #bac8d3;
+    border-color: none;
+    transition: all 0.5s ease;
 }
+
+/* Make Login button stand out */
+nav ul li:last-child a {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+nav ul li:last-child a:hover {
+    background-color: transparent;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        text-align: center;
+    }
+    
+    nav ul li {
+        width: 100%;
+    }
+    
+    nav ul li a {
+        display: block;
+        width: 100%;
+    }
+}
+
+/*==========================*/
 
 /* Hero Section */
 .hero {
