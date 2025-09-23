@@ -116,9 +116,13 @@ nav ul li:last-child a:hover {
 
 /* Hero Section */
 .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-    padding: 100px 0;
     text-align: center;
+    padding: 100px 0;
     position: relative;
     overflow:hidden;
 }
@@ -161,6 +165,11 @@ nav ul li:last-child a:hover {
     color:var(--accent-color)
 }
 
+/* homepage hero */
+.home .hero{
+    height: 80vh;
+}
+
 /* Services Section */
 .services h2 {
     text-align: center;
@@ -173,6 +182,7 @@ nav ul li:last-child a:hover {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
+    padding: 30px;
 }
 
 .cards div {
