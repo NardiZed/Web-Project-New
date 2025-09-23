@@ -8,6 +8,7 @@
     --bg-light: #D2C1B6;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --border-radius: 8px;
+    --nav-color: #ffffff;
 }
 
 /* Global Styles */
@@ -18,6 +19,7 @@
 }
 
 body {
+    padding-top: 80px; /* To prevent content being hidden under fixed nav */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-dark);
@@ -28,6 +30,12 @@ body {
 nav {
     padding: 1rem 2rem;
     box-shadow: var(--shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--nav-color)
 }
 
 nav {
