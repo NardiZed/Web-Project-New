@@ -166,7 +166,7 @@ nav ul li:last-child a:hover {
 }
 
 /* homepage hero */
-.home .hero{
+.Home .hero{
     height: 80vh;
 }
 
@@ -258,8 +258,327 @@ nav ul li:last-child a:hover {
     margin-right: 10px;
     transform: scale(1.2);
     cursor: pointer;
-    
 }
+
+/*==========================*/
+/* Login Page Design */
+
+.Login .login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;  
+    height: 85vh;
+    width: auto;
+}
+
+.Login .login-container>div{
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);    
+    background-color: #c6e7ec;
+    width: 400px;
+    height: 65vh;
+    text-align: center;
+}
+
+.Login .login-form h1{
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+.Login .login-form p{
+    margin-bottom: 20px;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.Login .login-form input[type="text"],
+.Login .login-form input[type="password"]{
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+.Login .login-form input[type="text"]:focus,
+.Login .login-form input[type="password"]:focus{
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px var(--accent-color);
+}
+
+.Login .login-form button{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: var(--accent-color);
+    border: 1px solid transparent;
+    color:var(--text-light);
+    font-weight:bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.Login .login-form button:hover{
+    background-color: transparent;
+    border-color:var(--accent-color);
+    box-shadow: 0 6px 20px #D2C1B6;
+    transform: scale(1.05);
+    color:var(--accent-color)
+}
+
+/*==========================*/
+
+/* Sign-Up Page Design */
+.Sign-Up .signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Changed from center to flex-start */
+    flex-direction: column;  
+    min-height: calc(100vh - 70px); /* Ensures container is visible below nav */
+    margin: 40px; /* Adds space below nav */
+}
+
+.Sign-Up .signup-container > div {
+    padding: 20px;
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);    
+    background-color: #c6e7ec;
+    width: 400px;
+    min-height: 65vh;
+    text-align: center;
+    margin: 0 auto; /* Center horizontally */
+}
+
+.Sign-Up .signup-container h1 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.Sign-Up .signup-container p {
+    margin-bottom: 20px;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.Sign-Up .signup-container .form input[type="text"],
+.Sign-Up .signup-container .form input[type="password"] {
+    width: 80%;
+    padding: 7px 10px; /* Reduced height */
+    margin: 10px 0;
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    height: 36px; /* Explicitly set a smaller height */
+    box-sizing: border-box;
+}
+
+.Sign-Up .signup-container .form input[type="text"]:focus,
+.Sign-Up .signup-container .form input[type="password"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px var(--accent-color);
+}
+
+.Sign-Up .signup-container .form button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: var(--accent-color);
+    border: 1px solid transparent;
+    color: var(--text-light);
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.Sign-Up .signup-container .form button:hover {
+    background-color: transparent;
+    border-color: var(--accent-color);
+    box-shadow: 0 6px 20px #D2C1B6;
+    transform: scale(1.05);
+    color: var(--accent-color);
+}
+
+/*==========================*/
+/* Sell Page */
+/* ...existing code... */
+
+/* Sell Page Styles */
+.Sell .container {
+    max-width: 700px;
+    margin: 40px auto 0 auto;
+    background: #f8fafc;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 2.5rem 2rem 2rem 2rem;
+}
+
+.Sell .hero {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem 0 1rem 0;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    border-radius: var(--border-radius);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(27,60,83,0.07);
+}
+
+.Sell .hero h1 {
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.Sell .hero p {
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+.Sell .form-container {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(27,60,83,0.05);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+}
+
+.Sell form label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    display: block;
+    text-align: left;
+}
+
+.Sell form input[type="text"],
+.Sell form textarea,
+.Sell form select {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    background: #f4f8fb;
+    transition: border-color 0.3s;
+    resize: none;
+}
+
+.Sell form input[type="text"]:focus,
+.Sell form textarea:focus,
+.Sell form select:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    background: #fff;
+}
+
+.Sell form textarea {
+    min-height: 80px;
+    max-height: 200px;
+}
+
+.Sell form input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.Sell form label[for="item-image"] {
+    margin-top: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.Sell .drag-drop-area {
+    border: 2px dashed var(--secondary-color);
+    border-radius: var(--border-radius);
+    background: #f4f8fb;
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.Sell .drag-drop-area:hover,
+.Sell .drag-drop-area:focus {
+    border-color: var(--accent-color);
+    background: #e9ecef;
+}
+
+.Sell .drag-drop-content svg {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.Sell .drag-drop-text {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.2rem;
+}
+
+.Sell .drag-drop-subtext {
+    color: var(--secondary-color);
+    font-size: 0.97rem;
+    margin-bottom: 0.2rem;
+}
+
+.Sell .browse-link {
+    color: var(--accent-color);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.Sell .form-note {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+}
+.Sell form button[type="submit"] {
+    display: block;
+    margin: 1.2rem auto 0 auto; /* Center horizontally */
+    background-color: var(--accent-color);
+    color: var(--text-light);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.7rem 2.2rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+.Sell form button[type="submit"]:hover {
+    background-color: transparent;
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    transform: scale(1.05);
+}
+/* Inline checkbox and label for terms agreement */
+.Sell form .terms-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.Sell form .terms-row input[type="checkbox"] {
+    margin: 0;
+    transform: scale(1.1);
+}
+
+.Sell form .terms-row label {
+    margin: 0;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+
 
 /* Footer Styles */
 footer {
