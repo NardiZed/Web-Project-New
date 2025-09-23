@@ -1,0 +1,391 @@
+/* CSS Variables for consistent theming */
+:root {
+    --primary-color: #1B3C53;
+    --secondary-color: #234C6A;
+    --accent-color: #D2C1B6;
+    --text-dark: #456882;
+    --text-light: #234C6A;
+    --bg-light: #D2C1B6;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+}
+/*==========================*/
+
+/* Navigation Styles for Horizontal Layout */
+nav {
+    padding: 1rem 2rem;
+    box-shadow: var(--shadow);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a[href="#"] {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var();
+    text-decoration: none;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    align-items:center;
+}
+
+nav ul li a {
+    color: var(--primary-color);
+    text-decoration: none;
+    padding: 0.5rem 1.5rem;
+    border: 2px solid transparent;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+nav ul li a:hover {
+    background-color: transparent;
+    color: var(--text-light);
+    border-color: var(--text-dark);
+    transition: all 0.5s ease;
+}
+
+/* Make Login button stand out */
+nav ul li:last-child a {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+nav ul li:last-child a:hover {
+    background-color: transparent;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        text-align: center;
+    }
+    
+    nav ul li {
+        width: 100%;
+    }
+    
+    nav ul li a {
+        display: block;
+        width: 100%;
+    }
+}
+
+/*==========================*/
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+    overflow:hidden;
+}
+
+.hero > div{
+    position: relative;
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.hero button {
+    transform-origin: center center;
+    background-color: var(--accent-color);
+    border: 2px solid transparent;
+    color:var(--text-light);
+    font-weight:bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.hero button:hover {
+    background-color: transparent;
+    border-color:var(--accent-color);
+    box-shadow: 0 6px 20px #D2C1B6;
+    transform: scale(1.05);
+    color:var(--accent-color)
+}
+
+/* Services Section */
+.services h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.cards div {
+    text-align: center;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    background: white;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.cards div:hover {
+    transform: translateY(-5px);
+}
+
+.cards img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+    background-color: var(--secondary-color);
+    border-radius: 50%;
+    padding: 15px;
+}
+
+.cards h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #0f1921;
+    color: var(--text-light);
+    padding: 3rem 0 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.link-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.link-container > div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Brand Section */
+.link-container div:first-child h3 {
+    color: var(--bg-light);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.link-container div:first-child p {
+    color: var(--text-light);
+    line-height: 1.6;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Quick Links Section */
+.link-container div:nth-child(2) h3 {
+    color: var(--bg-light);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.link-container div:nth-child(2) a {
+    display: block;
+    color: var(--text-dark);
+    text-decoration: none;
+    margin-bottom: 0.8rem;
+    padding: 0.5rem 0;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+    padding-left: 1rem;
+}
+
+.link-container div:nth-child(2) a:hover {
+    color: var(--bg-light);
+    border-left-color: var(--accent-color);
+    transform: translateX(5px);
+    background: linear-gradient(90deg, rgba(210, 193, 182, 0.1), transparent);
+}
+
+/* Contact Section */
+.link-container div:nth-child(3) h3 {
+    color: var(--bg-light);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.link-container div:nth-child(3) p {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.link-container div:nth-child(3) p:before {
+    content: "•";
+    color: var(--accent-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Footer Bottom Section */
+footer hr {
+    border: none;
+    border-top: 1px solid var(--secondary-color);
+    margin: 2.5rem auto 1.5rem;
+    max-width: 1200px;
+    width: calc(100% - 4rem);
+    opacity: 0.3;
+}
+
+footer > div:last-child {
+    text-align: center;
+    padding: 0 2rem;
+}
+
+footer > div:last-child p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 500;
+}
+
+/* Decorative Elements */
+footer::before {
+    content: "";
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--accent-color));
+    margin-bottom: 2rem;
+}
+
+/* Hover Effects for Entire Footer Sections */
+.link-container > div {
+    transition: transform 0.3s ease;
+}
+
+.link-container > div:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .link-container {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        text-align: center;
+    }
+    
+    .link-container div:nth-child(2) a {
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        padding-left: 0;
+        padding-bottom: 0.5rem;
+    }
+    
+    .link-container div:nth-child(2) a:hover {
+        border-left-color: transparent;
+        border-bottom-color: var(--accent-color);
+        transform: translateY(-2px);
+    }
+    
+    .link-container div:nth-child(3) p {
+        justify-content: center;
+    }
+    
+    footer {
+        padding: 2rem 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .link-container {
+        padding: 0 1rem;
+    }
+    
+    .link-container div:first-child h3 {
+        font-size: 1.5rem;
+    }
+    
+    .link-container div:nth-child(2) h3,
+    .link-container div:nth-child(3) h3 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Animation for footer appearance */
+footer {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
