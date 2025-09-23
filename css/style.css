@@ -47,7 +47,7 @@ nav {
 nav a[href="#"] {
     font-size: 2.5rem;
     font-weight: bold;
-    color: var();
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -211,6 +211,54 @@ nav ul li:last-child a:hover {
     color: var(--primary-color);
     margin-bottom: 1rem;
     font-weight: 600;
+}
+
+
+/*==========================*/
+/* Marketplace Page Design */
+.Marketplace .hero{
+    height: 50vh;
+}
+
+.Marketplace .Aside{
+    width: 25%;
+    float: left;
+    padding: 20px;
+    background-color: #f4f4f4;
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+    margin-right: 20px;
+}
+
+.Marketplace .Aside h3{
+    margin:15px 0 15px 0;
+    color: var(--primary-color);
+}
+
+.Marketplace .cards button{
+    margin-top: 10px;
+    background-color: var(--accent-color);
+    border: 2px solid transparent;
+    color:var(--text-light);
+    font-weight:bold;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+}
+.Marketplace .cards button:hover{
+    background-color: transparent;
+    border-color:var(--accent-color);
+    color:var(--accent-color);
+}
+
+.Marketplace .Aside button{
+    border: none;
+}
+.Marketplace input[type="checkbox"]{
+    margin-right: 10px;
+    transform: scale(1.2);
+    cursor: pointer;
+    
 }
 
 /* Footer Styles */
