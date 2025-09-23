@@ -1,11 +1,11 @@
 /* CSS Variables for consistent theming */
 :root {
-    --primary-color: #1B3C53;
-    --secondary-color: #234C6A;
-    --accent-color: #D2C1B6;
-    --text-dark: #456882;
-    --text-light: #234C6A;
-    --bg-light: #D2C1B6;
+    --primary-color: #101935;
+    --secondary-color: #564787;
+    --accent-color: #F2FDFF;
+    --text-dark: #564787;
+    --text-light: #9AD4D6;
+    --bg-light: #F2FDFF;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --border-radius: 8px;
     --nav-color: #ffffff;
@@ -276,7 +276,7 @@ nav ul li:last-child a:hover {
     padding: 20px;
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);    
-    background-color: #c6e7ec;
+    background-color: #ecf8fa;
     width: 400px;
     height: 65vh;
     text-align: center;
@@ -346,7 +346,7 @@ nav ul li:last-child a:hover {
     padding: 20px;
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);    
-    background-color: #c6e7ec;
+    background-color:  #ecf8fa;
     width: 400px;
     min-height: 65vh;
     text-align: center;
@@ -631,7 +631,7 @@ footer {
 
 .link-container div:nth-child(2) a {
     display: block;
-    color: var(--text-dark);
+    color: var(--text-light);
     text-decoration: none;
     margin-bottom: 0.8rem;
     padding: 0.5rem 0;
@@ -677,7 +677,7 @@ footer {
 /* Footer Bottom Section */
 footer hr {
     border: none;
-    border-top: 1px solid var(--secondary-color);
+    border-top: 1px solid var(--bg-light);
     margin: 2.5rem auto 1.5rem;
     max-width: 1200px;
     width: calc(100% - 4rem);
