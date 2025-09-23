@@ -63,8 +63,9 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #bac8d3;
-    border-color: none;
+    background-color: transparent;
+    color: var(--text-light);
+    border-color: var(--text-dark);
     transition: all 0.5s ease;
 }
 
@@ -110,6 +111,13 @@ nav ul li:last-child a:hover {
     background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
     padding: 100px 0;
     text-align: center;
+    position: relative;
+    overflow:hidden;
+}
+
+.hero > div{
+    position: relative;
+    z-index: 2;
 }
 
 .hero h1 {
@@ -126,17 +134,23 @@ nav ul li:last-child a:hover {
 }
 
 .hero button {
+    transform-origin: center center;
     background-color: var(--accent-color);
-    border: none;
-    padding: 12px 30px;
-    font-size: 1.1rem;
+    border: 2px solid transparent;
+    color:var(--text-light);
+    font-weight:bold;
+    padding: 0.75rem 1.5rem;
     border-radius: var(--border-radius);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .hero button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow);
+    background-color: transparent;
+    border-color:var(--accent-color);
+    box-shadow: 0 6px 20px #D2C1B6;
+    transform: scale(1.05);
+    color:var(--accent-color)
 }
 
 /* Services Section */
