@@ -269,9 +269,9 @@ nav ul li a:hover {
 
 .Login .login-container>div{
     padding: 20px;
-    box-shadow: var(--shadow);
+    box-shadow:var(--secondary-color) 0px 0px 10px 0px;
     border-radius: var(--border-radius);    
-    background-color: #ecf8fa;
+    background-color: var(--primary-color);
     width: 400px;
     height: 65vh;
     text-align: center;
@@ -279,13 +279,13 @@ nav ul li a:hover {
 
 .Login .login-form h1{
     margin-bottom: 20px;
-    color: var(--primary-color);
+    color: var(--accent-color);
     font-weight: 700;
 }
 .Login .login-form p{
     margin-bottom: 20px;
-    color: var(--text-dark);
-    font-weight: 500;
+    color: var(--nav-color);
+    font-weight: 300;
 }
 
 .Login .login-form input[type="text"],
@@ -301,17 +301,17 @@ nav ul li a:hover {
 .Login .login-form input[type="password"]:focus{
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 5px var(--accent-color);
+    box-shadow: 0 0 5px var(--bg-light);
 }
 
 .Login .login-form button{
     margin-top: 20px;
     margin-bottom: 20px;
-    background-color: var(--primary-color);
+    background-color: var(--accent-color);
     border: 1px solid transparent;
-    color:var(--accent-color);
+    color:var(--primary-color);
     font-weight:bold;
-    padding: 10px;
+    padding: 8px;
     width: 80px;
     border-radius: var(--border-radius);
     transition: all 0.5s ease;
@@ -319,11 +319,11 @@ nav ul li a:hover {
 }
 
 .Login .login-form button:hover{
-    background-color: var(--accent-color);
-    border-color:var(--primary-color);
+    background-color: var(--primary-color);
+    border-color:var(--accent-color);
     box-shadow: 0 6px 20px #958a83;
     transform: scale(1.05);
-    color:var(--primary-color)
+    color:var(--accent-color)
 }
 
 /*==========================*/
@@ -341,9 +341,9 @@ nav ul li a:hover {
 
 .Sign-Up .signup-container > div {
     padding: 20px;
-    box-shadow: var(--shadow);
+    box-shadow: var(--secondary-color) 0px 0px 10px 0px;
     border-radius: var(--border-radius);    
-    background-color:  #ecf8fa;
+    background-color:  var(--primary-color);
     width: 400px;
     min-height: 65vh;
     text-align: center;
@@ -352,14 +352,14 @@ nav ul li a:hover {
 
 .Sign-Up .signup-container h1 {
     margin-bottom: 20px;
-    color: var(--primary-color);
+    color: var(--accent-color);
     font-weight: 700;
 }
 
 .Sign-Up .signup-container p {
     margin-bottom: 20px;
-    color: var(--text-dark);
-    font-weight: 500;
+    color: var(--accent-color);
+    font-weight: 300;
 }
 
 .Sign-Up .signup-container .form input[type="text"],
@@ -370,7 +370,7 @@ nav ul li a:hover {
     border: 1px solid var(--secondary-color);
     border-radius: var(--border-radius);
     font-size: 1rem;
-    height: 36px; /* Explicitly set a smaller height */
+    height: 30px; /* Explicitly set a smaller height */
     box-sizing: border-box;
 }
 
@@ -384,22 +384,22 @@ nav ul li a:hover {
 .Sign-Up .signup-container .form button {
     margin-top: 20px;
     margin-bottom: 20px;
-    background-color: var(--primary-color);
+    background-color: var(--accent-color);
     border: 1px solid transparent;
-    color: var(--accent-color);
+    color: var(--primary-color);
     font-weight: bold;
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem;
     border-radius: var(--border-radius);
     transition: all 0.5s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .Sign-Up .signup-container .form button:hover {
-    background-color: var(--accent-color);
-    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    border-color: var(--accent-color);
     box-shadow: 0 6px 20px #D2C1B6;
     transform: scale(1.05);
-    color: var(--primary-color);
+    color: var(--accent-color);
 }
 
 /*==========================*/
