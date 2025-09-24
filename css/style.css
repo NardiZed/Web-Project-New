@@ -271,7 +271,7 @@ nav ul li a:hover {
     padding: 20px;
     box-shadow:var(--secondary-color) 0px 0px 10px 0px;
     border-radius: var(--border-radius);    
-    background-color: var(--primary-color);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
     width: 400px;
     height: 65vh;
     text-align: center;
@@ -343,7 +343,7 @@ nav ul li a:hover {
     padding: 20px;
     box-shadow: var(--secondary-color) 0px 0px 10px 0px;
     border-radius: var(--border-radius);    
-    background-color:  var(--primary-color);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
     width: 400px;
     min-height: 65vh;
     text-align: center;
