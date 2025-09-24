@@ -64,7 +64,6 @@ nav ul li a {
     color: var(--primary-color);
     text-decoration: none;
     padding: 0.5rem 1.5rem;
-    border: 2px solid transparent;
     border-radius: var(--border-radius);
     transition: all 0.3s ease;
     font-weight: 500;
@@ -72,20 +71,14 @@ nav ul li a {
 
 nav ul li a:hover {
     background-color: transparent;
-    color: var(--text-light);
-    border-color: var(--text-dark);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    color: var(--primary-color);
     transition: all 0.5s ease;
+
 }
 
-/* Make Login button stand out */
-nav ul li:last-child a {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-}
 
-nav ul li:last-child a:hover {
-    background-color: transparent;
-}
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
@@ -149,7 +142,7 @@ nav ul li:last-child a:hover {
     transform-origin: center center;
     background-color: var(--accent-color);
     border: 2px solid transparent;
-    color:var(--text-light);
+    color:var(--primary-color);
     font-weight:bold;
     padding: 0.75rem 1.5rem;
     border-radius: var(--border-radius);
@@ -237,18 +230,18 @@ nav ul li:last-child a:hover {
 
 .Marketplace .cards button{
     margin-top: 10px;
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     border: 2px solid transparent;
-    color:var(--text-light);
+    color:var(--accent-color);
     font-weight:bold;
     padding: 0.5rem 1rem;
     border-radius: var(--border-radius);
     transition: all 0.3s ease;
 }
 .Marketplace .cards button:hover{
-    background-color: transparent;
-    border-color:var(--accent-color);
-    color:var(--accent-color);
+    background-color: var(--accent-color);
+    border-color:var(--primary-color);
+    color:var(--primary-color);
 }
 
 .Marketplace .Aside button{
@@ -296,7 +289,7 @@ nav ul li:last-child a:hover {
 .Login .login-form input[type="text"],
 .Login .login-form input[type="password"]{
     width: 80%;
-    padding: 10px;
+    padding: 5px;
     margin: 10px 0;
     border: 1px solid var(--secondary-color);
     border-radius: var(--border-radius);
@@ -312,22 +305,23 @@ nav ul li:last-child a:hover {
 .Login .login-form button{
     margin-top: 20px;
     margin-bottom: 20px;
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     border: 1px solid transparent;
-    color:var(--text-light);
+    color:var(--accent-color);
     font-weight:bold;
-    padding: 0.75rem 1.5rem;
+    padding: 10px;
+    width: 80px;
     border-radius: var(--border-radius);
     transition: all 0.5s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .Login .login-form button:hover{
-    background-color: transparent;
-    border-color:var(--accent-color);
-    box-shadow: 0 6px 20px #D2C1B6;
+    background-color: var(--accent-color);
+    border-color:var(--primary-color);
+    box-shadow: 0 6px 20px #958a83;
     transform: scale(1.05);
-    color:var(--accent-color)
+    color:var(--primary-color)
 }
 
 /*==========================*/
@@ -387,9 +381,9 @@ nav ul li:last-child a:hover {
 .Sign-Up .signup-container .form button {
     margin-top: 20px;
     margin-bottom: 20px;
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     border: 1px solid transparent;
-    color: var(--text-light);
+    color: var(--accent-color);
     font-weight: bold;
     padding: 0.75rem 1.5rem;
     border-radius: var(--border-radius);
@@ -398,16 +392,15 @@ nav ul li:last-child a:hover {
 }
 
 .Sign-Up .signup-container .form button:hover {
-    background-color: transparent;
-    border-color: var(--accent-color);
+    background-color: var(--accent-color);
+    border-color: var(--primary-color);
     box-shadow: 0 6px 20px #D2C1B6;
     transform: scale(1.05);
-    color: var(--accent-color);
+    color: var(--primary-color);
 }
 
 /*==========================*/
 /* Sell Page */
-/* ...existing code... */
 
 /* Sell Page Styles */
 .Sell .container {
@@ -542,8 +535,8 @@ nav ul li:last-child a:hover {
 .Sell form button[type="submit"] {
     display: block;
     margin: 1.2rem auto 0 auto; /* Center horizontally */
-    background-color: var(--accent-color);
-    color: var(--text-light);
+    background-color: var(--primary-color);
+    color: var(--accent-color);
     border: none;
     border-radius: var(--border-radius);
     padding: 0.7rem 2.2rem;
@@ -554,9 +547,9 @@ nav ul li:last-child a:hover {
 }
 
 .Sell form button[type="submit"]:hover {
-    background-color: transparent;
-    border: 2px solid var(--accent-color);
-    color: var(--accent-color);
+    background-color: var(--accent-color);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
     transform: scale(1.05);
 }
 /* Inline checkbox and label for terms agreement */
