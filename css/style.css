@@ -265,6 +265,18 @@ nav ul li a:hover {
     padding: 0;            /* Remove padding so image fills the card */
     display: block;
 }
+
+.Cart .product-container img{
+    width: 100%;
+    height: 180px;         /* Set a fixed height for consistency */
+    object-fit: cover;     /* Ensures the image covers the box without distortion */
+    margin-bottom: 1rem;
+    background-color: var(--secondary-color);
+    border-radius: var(--border-radius);
+    padding: 0;            /* Remove padding so image fills the card */
+    display: block;
+}
+
 /*==========================*/
 /* Login Page Design */
 
