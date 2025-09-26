@@ -6,6 +6,204 @@ let filteredProducts = []
 let selectedCategories = []
 let selectedPriceRanges = []
 
+// Cart functionality
+let cart = JSON.parse(localStorage.getItem("cart")) || []
+
+// Update cart counter in navigation
+function updateCartCounter() {
+  const cartLinks = document.querySelectorAll('nav ul li a[href="cart.html"]')
+  cartLinks.forEach((cartLink) => {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
+
+    // Remove existing counter if it exists
+    const existingCounter = cartLink.querySelector(".cart-counter")
+    if (existingCounter) {
+      existingCounter.remove()
+    }
+
+    // Add counter if there are items
+    if (totalItems > 0) {
+      const counter = document.createElement("span")
+      counter.className = "cart-counter"
+      counter.textContent = totalItems
+      cartLink.appendChild(counter)
+    }
+  })
+}
+
+// Add product to cart (updated implementation with auth check)
+function addToCart(productId) {
+  console.log("[v0] Adding product to cart:", productId)
+
+  // Check if user is logged in
+  const authToken = localStorage.getItem("authToken")
+  const userData = localStorage.getItem("user")
+
+  if (!authToken || !userData) {
+    // User is not logged in, show login prompt
+    const shouldRedirect = confirm(
+      "You need to be logged in to add items to your cart. Would you like to go to the login page?",
+    )
+    if (shouldRedirect) {
+      window.location.href = "Login.html"
+    }
+    return
+  }
+
+  // Find the product in allProducts array
+  const product = allProducts.find((p) => p.id == productId)
+  if (!product) {
+    console.error("[v0] Product not found:", productId)
+    return
+  }
+
+  // Check if product already exists in cart
+  const existingItem = cart.find((item) => item.id == productId)
+
+  if (existingItem) {
+    existingItem.quantity += 1
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      description: product.description,
+      image_url: product.image_url,
+      quantity: 1,
+    })
+  }
+
+  // Save to localStorage
+  localStorage.setItem("cart", JSON.stringify(cart))
+
+  // Update cart counter
+  updateCartCounter()
+
+  console.log("[v0] Cart updated:", cart)
+}
+
+// Remove product from cart
+function removeFromCart(productId) {
+  console.log("[v0] Removing product from cart:", productId)
+
+  cart = cart.filter((item) => item.id != productId)
+  localStorage.setItem("cart", JSON.stringify(cart))
+
+  // Update cart counter
+  updateCartCounter()
+
+  // Refresh cart display if on cart page
+  if (document.body.classList.contains("Cart")) {
+    displayCartItems()
+  }
+}
+
+// Update quantity in cart
+function updateCartQuantity(productId, newQuantity) {
+  console.log("[v0] Updating cart quantity:", productId, newQuantity)
+
+  if (newQuantity <= 0) {
+    removeFromCart(productId)
+    return
+  }
+
+  const item = cart.find((item) => item.id == productId)
+  if (item) {
+    item.quantity = newQuantity
+    localStorage.setItem("cart", JSON.stringify(cart))
+    updateCartCounter()
+
+    // Refresh cart display if on cart page
+    if (document.body.classList.contains("Cart")) {
+      displayCartItems()
+    }
+  }
+}
+
+// Display cart items on cart page
+function displayCartItems() {
+  const productContainer = document.querySelector(".product-container")
+  const checkoutButton = document.querySelector(".main-container button")
+
+  if (!productContainer) return
+
+  if (cart.length === 0) {
+    productContainer.innerHTML = `
+      <div class="empty-cart">
+        <h2>Your cart is empty</h2>
+        <p>Add some products to your cart to see them here.</p>
+        <a href="Marketplace.html" class="continue-shopping-btn">Continue Shopping</a>
+      </div>
+    `
+    if (checkoutButton) {
+      checkoutButton.style.display = "none"
+    }
+    return
+  }
+
+  const cartTotal = cart.reduce((sum, item) => sum + Number.parseFloat(item.price) * item.quantity, 0)
+
+  productContainer.innerHTML = cart
+    .map(
+      (item) => `
+    <div class="cart-item" data-product-id="${item.id}">
+      <img src="${item.image_url || "/placeholder.svg?height=100&width=100"}" alt="${item.name}">
+      <div class="item-details">
+        <h3>${item.name}</h3>
+        <p class="category">${item.category}</p>
+        <p class="price">$${Number.parseFloat(item.price).toFixed(2)}</p>
+        <p class="description">${item.description || "No description available"}</p>
+      </div>
+      <div class="quantity-controls">
+        <button class="quantity-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})">-</button>
+        <span class="quantity">${item.quantity}</span>
+        <button class="quantity-btn" onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})">+</button>
+      </div>
+      <div class="item-total">
+        <p class="item-price">$${(Number.parseFloat(item.price) * item.quantity).toFixed(2)}</p>
+        <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove from cart</button>
+      </div>
+    </div>
+  `,
+    )
+    .join("")
+
+  // Add cart summary
+  const cartSummary = document.createElement("div")
+  cartSummary.className = "cart-summary"
+  cartSummary.innerHTML = `
+    <div class="summary-row">
+      <span>Total Items: ${cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+    </div>
+    <div class="summary-row total">
+      <span>Total: $${cartTotal.toFixed(2)}</span>
+    </div>
+  `
+  productContainer.appendChild(cartSummary)
+
+  if (checkoutButton) {
+    checkoutButton.style.display = "block"
+    checkoutButton.onclick = () => {
+      console.log(`[v0] Proceeding to checkout with total: $${cartTotal.toFixed(2)}`)
+      // Here you would typically redirect to a checkout page or process payment
+    }
+  }
+}
+
+// Initialize cart functionality
+function initializeCart() {
+  console.log("[v0] Initializing cart functionality")
+
+  // Update cart counter on page load
+  updateCartCounter()
+
+  // If on cart page, display cart items
+  if (document.body.classList.contains("Cart")) {
+    displayCartItems()
+  }
+}
+
 function updateNavbarForAuthState() {
   const authToken = localStorage.getItem("authToken")
   const userData = localStorage.getItem("user")
@@ -191,13 +389,6 @@ function displayProducts(products) {
       addToCart(productId)
     })
   })
-}
-
-// Add product to cart (placeholder function)
-function addToCart(productId) {
-  console.log("[v0] Adding product to cart:", productId)
-  // TODO: Implement cart functionality
-  alert(`Product ${productId} added to cart!`)
 }
 
 // Show error message
@@ -425,6 +616,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Update navbar based on auth state
   updateNavbarForAuthState()
 
+  initializeCart()
+
   if (document.body.classList.contains("Marketplace")) {
     console.log("[v0] Marketplace page detected, initializing...")
     initializeMarketplace()
@@ -601,10 +794,8 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("authToken", data.token)
         localStorage.setItem("user", JSON.stringify(data.user))
 
-        alert("Login successful! Redirecting...")
-        setTimeout(() => {
-          window.location.href = "index.html"
-        }, 700)
+        // Redirect immediately
+        window.location.href = "index.html"
       } catch (error) {
         console.error("[v0] Login error:", error)
         let errorMessage = "Network error. Please try again."
@@ -792,10 +983,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json()
         console.log("[v0] Registration response data:", data)
 
-        alert("Account created successfully! Redirecting to login...")
-        setTimeout(() => {
-          window.location.href = "Login.html"
-        }, 700)
+        // Redirect immediately
+        window.location.href = "Login.html"
       } catch (error) {
         console.error("[v0] Registration error:", error)
         let errorMessage = "Network error. Please try again."
