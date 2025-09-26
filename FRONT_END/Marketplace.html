@@ -25,99 +25,85 @@
         <h1>Marketplace</h1>
         <p>From homes and cars to everyday essentials — search, discover, and secure what you need</p>
     </section>
-    <section class="Aside">
-        <div class="Categories">
-            <h3>Categories</h3>
-            <span>0 selected <button>Select All</button> <button>Clear All</button></span>
-            <div class="check-list">
-                <input type="checkbox"><label for="">Electronics</label><br>
-                <input type="checkbox"><label for="">Clothing</label><br>
-                <input type="checkbox"><label for="">Real Estate</label><br>
-                <input type="checkbox"><label for="">Vechiles</label><br>
-                <input type="checkbox"><label for="">Home Goods</label><br>
-                <input type="checkbox"><label for="">Cosmetics</label><br>
-            </div>
-        </div>
-        <div>
-            <h3>Price Range</h3>
-            <div class="check-list">
-                <input type="checkbox"><label for="">>500ETB</label><br>
-                <input type="checkbox"><label for="">500-1500</label><br>
-                <input type="checkbox"><label for="">1500-2500</label><br>
-                <input type="checkbox"><label for="">2500-5000</label><br>
-                <input type="checkbox"><label for="">5000-10000</label><br>
-                <input type="checkbox"><label for="">>10000</label><br>
-            </div>
-        </div>
-    </section>
-    <section class="main-body">
-        <div class="cards">
-            <div>
-                <img src="" alt="">
-                <h3>Name</h3>
-                <p>category</p>
-                <p>price</p>
-                <p>placeholder description</p>
-                <button>Add to cart</button>
+    <!-- Wrapped aside and main-body in a flex container -->
+    <div class="main-content">
+        <section class="Aside">
+            <div class="Categories">
+                <h3>Categories</h3>
+                <!-- Updated span to show dynamic count and added proper onclick handlers -->
+                <span>0 selected <button onclick="selectAllFilters()">Select All</button> <button onclick="clearAllFilters()">Clear All</button></span>
+                <div class="check-list">
+                    <!-- Added proper IDs and labels for accessibility -->
+                    <input type="checkbox" id="electronics"><label for="electronics">Electronics</label><br>
+                    <input type="checkbox" id="clothing"><label for="clothing">Clothing</label><br>
+                    <input type="checkbox" id="real-estate"><label for="real-estate">Real Estate</label><br>
+                    <input type="checkbox" id="vehicles"><label for="vehicles">Vehicles</label><br>
+                    <input type="checkbox" id="home-goods"><label for="home-goods">Home Goods</label><br>
+                    <input type="checkbox" id="cosmetics"><label for="cosmetics">Cosmetics</label><br>
+                </div>
             </div>
             <div>
-                <img src="" alt="">
-                <h3>Name</h3>
-                <p>Category</p>
-                <p>Price</p>
-                <p>placeholder description</p>
-                <button>Add to cart</button>
+                <h3>Price Range</h3>
+                <div class="check-list">
+                    <!-- Added proper IDs and labels for price ranges -->
+                    <input type="checkbox" id="price-500"><label for="price-500">>500ETB</label><br>
+                    <input type="checkbox" id="price-500-1500"><label for="price-500-1500">500-1500</label><br>
+                    <input type="checkbox" id="price-1500-2500"><label for="price-1500-2500">1500-2500</label><br>
+                    <input type="checkbox" id="price-2500-5000"><label for="price-2500-5000">2500-5000</label><br>
+                    <input type="checkbox" id="price-5000-10000"><label for="price-5000-10000">5000-10000</label><br>
+                    <input type="checkbox" id="price-10000"><label for="price-10000">>10000</label><br>
+                </div>
             </div>
-            <div>
-                <img src="" alt="">
-                <h3>Name</h3>
-                <p>Category</p>
-                <p>placeholder description</p>
-                <button>Add to cart</button>
+            <!-- Added search functionality -->
+            <div class="search-section">
+                <h3>Search</h3>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
+                    <button onclick="performSearch()" class="search-btn">Search</button>
+                </div>
             </div>
-            <div>
-                <img src="" alt="">
-                <h3>Name</h3>
-                <p>Category</p>
-                <p>price</p>
-                <p>placeholder description</p>
-                <button>Add to cart</button>
+        </section>
+        <section class="main-body">
+            <!-- Added loading state and better structure for product cards -->
+            <div class="products-header">
+                <h2>Products</h2>
+                <div class="products-count">
+                    <span id="productsCount">Loading...</span>
+                </div>
             </div>
-            <div>
-                <img src="" alt="">
-                <h3>Name</h3>
-                <p>Category</p>
-                <p>price</p>
-                <p>placeholder description</p>
-                <button>Add to cart</button>
+            <div class="cards" id="productsContainer">
+                <!-- Products will be dynamically loaded here -->
+                <div class="loading-spinner">
+                    <p>Loading products...</p>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
     <footer>
-    <div class="link-container">
-        <div>
-            <h3>Universal Market</h3>
-            <p>Your one-stop shop for everything from cars to everyday essentials.</p>
+        <div class="link-container">
+            <div>
+                <h3>Universal Market</h3>
+                <p>Your one-stop shop for everything from cars to everyday essentials.</p>
+            </div>
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="Marketplace.html">Marketplace</a>
+                <a href="Sell.html">Sell</a>
+                <a href="cart.html">Cart</a>
+                <a href="Login.html">Login</a>
+            </div>
+            <div>
+                <h3>Contact</h3>
+                <p>Email: support@universalmarket.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
         </div>
+        <hr>
         <div>
-            <h3>Quick Links</h3>
-            <a href="index.html">Home</a>
-            <a href="Marketplace.html">Marketplace</a>
-            <a href="Sell.html">Sell</a>
-            <a href="cart.html">Cart</a>
-            <a href="Login.html">Login</a>
+            <p>© 2025 Universal Marketplace. All rights reserved.</p>
         </div>
-        <div>
-            <h3>Contact</h3>
-            <p>Email: support@universalmarket.com</p>
-            <p>Phone: (555) 123-4567</p>
-        </div>
-    </div>
-    <hr>
-    <div>
-        <p>© 2025 Universal Marketplace. All rights reserved.</p>
-    </div>
-</footer>
-<script src="./js/main.js"></script>
+    </footer>
+    <script src="./js/main.js"></script>
 </body>
 </html>

@@ -370,19 +370,25 @@ nav ul li a:hover {
   height: 50vh;
 }
 
+.Marketplace .main-content {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  min-height: 60vh;
+}
+
 .Marketplace .Aside {
   width: 25%;
-  float: left;
   padding: 20px;
   background-color: #f4f4f4;
   box-shadow: var(--shadow);
   border-radius: var(--border-radius);
-  margin-right: 20px;
+  height: fit-content;
 }
 
-.Marketplace .Aside h3 {
-  margin: 15px 0 15px 0;
-  color: var(--primary-color);
+.Marketplace .main-body {
+  flex: 1;
+  min-height: 500px;
 }
 
 .Marketplace .cards button {

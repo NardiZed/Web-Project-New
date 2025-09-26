@@ -3,6 +3,7 @@ const cors = require("cors")
 require("dotenv").config()
 
 const { registerUser, loginUser, authenticateToken } = require("./src/auth")
+const { getProducts, getProductById, getCategories } = require("./src/products")
 
 const app = express()
 
@@ -62,6 +63,11 @@ app.get("/api/health", (req, res) => {
 app.post("/api/auth/register", registerUser)
 app.post("/api/auth/login", loginUser)
 
+// Products routes
+app.get("/api/products", getProducts)
+app.get("/api/products/:id", getProductById)
+app.get("/api/categories", getCategories)
+
 // Protected route example
 app.get("/api/auth/profile", authenticateToken, (req, res) => {
   res.json({
@@ -97,4 +103,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`)
   console.log(`📍 Health check: http://localhost:${PORT}/api/health`)
   console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth/`)
+  console.log(`🛍️ Products endpoints: http://localhost:${PORT}/api/products`)
 })

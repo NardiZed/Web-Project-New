@@ -1,5 +1,11 @@
 console.log("[v0] Frontend main.js loaded successfully")
 
+// Global variables for marketplace
+let allProducts = []
+let filteredProducts = []
+let selectedCategories = []
+let selectedPriceRanges = []
+
 function updateNavbarForAuthState() {
   const authToken = localStorage.getItem("authToken")
   const userData = localStorage.getItem("user")
@@ -98,11 +104,370 @@ function handleSignOut() {
   }, 300)
 }
 
+// Fetch products from the backend API
+async function fetchProducts(filters = {}) {
+  try {
+    console.log("[v0] Fetching products with filters:", filters)
+
+    const queryParams = new URLSearchParams()
+
+    // Add category filters
+    if (filters.categories && filters.categories.length > 0) {
+      queryParams.append("categories", filters.categories.join(","))
+    }
+
+    // Add price range filters
+    if (filters.minPrice) queryParams.append("minPrice", filters.minPrice)
+    if (filters.maxPrice) queryParams.append("maxPrice", filters.maxPrice)
+
+    // Add search filter
+    if (filters.search) queryParams.append("search", filters.search)
+
+    const url = `http://localhost:5000/api/products${queryParams.toString() ? "?" + queryParams.toString() : ""}`
+    console.log("[v0] Fetching from URL:", url)
+
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    console.log("[v0] Products fetched successfully:", data)
+
+    return data.products || []
+  } catch (error) {
+    console.error("[v0] Error fetching products:", error)
+    showError("Failed to load products. Please check if the backend server is running.")
+    return []
+  }
+}
+
+// Display products in the marketplace
+function displayProducts(products) {
+  const cardsContainer = document.querySelector(".cards")
+  const productsCount = document.getElementById("productsCount")
+
+  if (!cardsContainer) {
+    console.error("[v0] Cards container not found")
+    return
+  }
+
+  // Update products count
+  if (productsCount) {
+    productsCount.textContent = `${products.length} product${products.length !== 1 ? "s" : ""} found`
+  }
+
+  if (!products || products.length === 0) {
+    cardsContainer.innerHTML = `
+      <div class="no-products">
+        <h3>No products found</h3>
+        <p>Try adjusting your filters or check back later.</p>
+      </div>
+    `
+    return
+  }
+
+  cardsContainer.innerHTML = products
+    .map(
+      (product) => `
+    <div class="product-card" data-category="${product.category}" data-price="${product.price}">
+      <img src="${product.image_url || "/placeholder.svg?height=200&width=200"}" alt="${product.name}" loading="lazy">
+      <h3>${product.name}</h3>
+      <p class="category">${product.category}</p>
+      <p class="price">$${Number.parseFloat(product.price).toFixed(2)}</p>
+      <p class="description">${product.description || "No description available"}</p>
+      <button class="add-to-cart-btn" data-product-id="${product.id}">Add to cart</button>
+    </div>
+  `,
+    )
+    .join("")
+
+  // Add event listeners to "Add to cart" buttons
+  const addToCartButtons = cardsContainer.querySelectorAll(".add-to-cart-btn")
+  addToCartButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      const productId = e.target.getAttribute("data-product-id")
+      addToCart(productId)
+    })
+  })
+}
+
+// Add product to cart (placeholder function)
+function addToCart(productId) {
+  console.log("[v0] Adding product to cart:", productId)
+  // TODO: Implement cart functionality
+  alert(`Product ${productId} added to cart!`)
+}
+
+// Show error message
+function showError(message) {
+  const cardsContainer = document.querySelector(".cards")
+  const productsCount = document.getElementById("productsCount")
+
+  if (cardsContainer) {
+    cardsContainer.innerHTML = `
+      <div class="error-message">
+        <h3>Error</h3>
+        <p>${message}</p>
+      </div>
+    `
+  }
+
+  if (productsCount) {
+    productsCount.textContent = "Error loading products"
+  }
+}
+
+// Initialize marketplace page
+async function initializeMarketplace() {
+  console.log("[v0] Initializing marketplace")
+
+  // Show loading state
+  const cardsContainer = document.querySelector(".cards")
+  const productsCount = document.getElementById("productsCount")
+
+  if (cardsContainer) {
+    cardsContainer.innerHTML = '<div class="loading-spinner"><p>Loading products...</p></div>'
+  }
+
+  if (productsCount) {
+    productsCount.textContent = "Loading..."
+  }
+
+  // Fetch and display all products initially
+  allProducts = await fetchProducts()
+  filteredProducts = [...allProducts]
+  displayProducts(filteredProducts)
+
+  // Update the selected count
+  updateSelectedCount()
+}
+
+// Update the selected filters count
+function updateSelectedCount() {
+  const countSpan = document.querySelector(".Categories span")
+  if (countSpan) {
+    const totalSelected = selectedCategories.length + selectedPriceRanges.length
+    countSpan.innerHTML = `${totalSelected} selected <button onclick="selectAllFilters()">Select All</button> <button onclick="clearAllFilters()">Clear All</button>`
+  }
+}
+
+// Select all filters
+function selectAllFilters() {
+  const categoryCheckboxes = document.querySelectorAll('.Categories .check-list input[type="checkbox"]')
+  const priceCheckboxes = document.querySelectorAll('.Categories + div .check-list input[type="checkbox"]')
+
+  console.log("[v0] Selecting all filters - categories:", categoryCheckboxes.length, "price:", priceCheckboxes.length)
+
+  categoryCheckboxes.forEach((checkbox) => {
+    checkbox.checked = true
+    console.log("[v0] Selected category checkbox:", checkbox.id)
+  })
+
+  priceCheckboxes.forEach((checkbox) => {
+    checkbox.checked = true
+    console.log("[v0] Selected price checkbox:", checkbox.id)
+  })
+
+  applyFilters()
+}
+
+// Clear all filters
+function clearAllFilters() {
+  const categoryCheckboxes = document.querySelectorAll('.Categories .check-list input[type="checkbox"]')
+  const priceCheckboxes = document.querySelectorAll('.Categories + div .check-list input[type="checkbox"]')
+
+  console.log("[v0] Clearing all filters - categories:", categoryCheckboxes.length, "price:", priceCheckboxes.length)
+
+  categoryCheckboxes.forEach((checkbox) => {
+    checkbox.checked = false
+    console.log("[v0] Cleared category checkbox:", checkbox.id)
+  })
+
+  priceCheckboxes.forEach((checkbox) => {
+    checkbox.checked = false
+    console.log("[v0] Cleared price checkbox:", checkbox.id)
+  })
+
+  selectedCategories = []
+  selectedPriceRanges = []
+
+  // Clear search input
+  const searchInput = document.getElementById("searchInput")
+  if (searchInput) {
+    searchInput.value = ""
+  }
+
+  // Fetch all products without filters
+  initializeMarketplace()
+}
+
+// Apply filters based on selected checkboxes
+async function applyFilters() {
+  console.log("[v0] Applying filters")
+
+  // Show loading state
+  const cardsContainer = document.querySelector(".cards")
+  const productsCount = document.getElementById("productsCount")
+
+  if (cardsContainer) {
+    cardsContainer.innerHTML = '<div class="loading-spinner"><p>Filtering products...</p></div>'
+  }
+
+  if (productsCount) {
+    productsCount.textContent = "Filtering..."
+  }
+
+  // Get selected categories using more specific selectors
+  const categoryCheckboxes = document.querySelectorAll('.Categories .check-list input[type="checkbox"]:checked')
+  selectedCategories = []
+
+  categoryCheckboxes.forEach((checkbox) => {
+    const label = checkbox.nextElementSibling
+    if (label && label.tagName === "LABEL") {
+      selectedCategories.push(label.textContent.trim())
+    }
+  })
+
+  // Get selected price ranges using more specific selectors
+  const priceCheckboxes = document.querySelectorAll('.Categories + div .check-list input[type="checkbox"]:checked')
+  selectedPriceRanges = []
+
+  priceCheckboxes.forEach((checkbox) => {
+    const label = checkbox.nextElementSibling
+    if (label && label.tagName === "LABEL") {
+      selectedPriceRanges.push(label.textContent.trim())
+    }
+  })
+
+  console.log("[v0] Selected categories:", selectedCategories)
+  console.log("[v0] Selected price ranges:", selectedPriceRanges)
+
+  // Build filters object
+  const filters = {}
+
+  // Add category filters
+  if (selectedCategories.length > 0) {
+    filters.categories = selectedCategories
+  }
+
+  // Add price range filters
+  if (selectedPriceRanges.length > 0) {
+    // Convert price range labels to min/max values
+    let minPrice = null
+    let maxPrice = null
+
+    selectedPriceRanges.forEach((range) => {
+      switch (range) {
+        case ">500ETB":
+          if (!minPrice || minPrice < 500) minPrice = 500
+          break
+        case "500-1500":
+          if (!minPrice || minPrice < 500) minPrice = 500
+          if (!maxPrice || maxPrice > 1500) maxPrice = 1500
+          break
+        case "1500-2500":
+          if (!minPrice || minPrice < 1500) minPrice = 1500
+          if (!maxPrice || maxPrice > 2500) maxPrice = 2500
+          break
+        case "2500-5000":
+          if (!minPrice || minPrice < 2500) minPrice = 2500
+          if (!maxPrice || maxPrice > 5000) maxPrice = 5000
+          break
+        case "5000-10000":
+          if (!minPrice || minPrice < 5000) minPrice = 5000
+          if (!maxPrice || maxPrice > 10000) maxPrice = 10000
+          break
+        case ">10000":
+          if (!minPrice || minPrice < 10000) minPrice = 10000
+          break
+      }
+    })
+
+    if (minPrice !== null) filters.minPrice = minPrice
+    if (maxPrice !== null) filters.maxPrice = maxPrice
+  }
+
+  // Add search filter
+  const searchInput = document.getElementById("searchInput")
+  if (searchInput && searchInput.value.trim()) {
+    filters.search = searchInput.value.trim()
+  }
+
+  console.log("[v0] Final filters object:", filters)
+
+  // Fetch filtered products
+  filteredProducts = await fetchProducts(filters)
+  displayProducts(filteredProducts)
+  updateSelectedCount()
+}
+
+function performSearch() {
+  applyFilters()
+}
+
+function debounce(func, wait) {
+  let timeout
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout)
+      func(...args)
+    }
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[v0] DOM loaded, initializing authentication")
 
   // Update navbar based on auth state
   updateNavbarForAuthState()
+
+  if (document.body.classList.contains("Marketplace")) {
+    console.log("[v0] Marketplace page detected, initializing...")
+    initializeMarketplace()
+
+    // Add event listeners to filter checkboxes with more specific selectors
+    const categoryCheckboxes = document.querySelectorAll('.Categories .check-list input[type="checkbox"]')
+    const priceCheckboxes = document.querySelectorAll('.Categories + div .check-list input[type="checkbox"]')
+
+    console.log("[v0] Found category checkboxes:", categoryCheckboxes.length)
+    console.log("[v0] Found price checkboxes:", priceCheckboxes.length)
+
+    // Add event listeners to category checkboxes
+    categoryCheckboxes.forEach((checkbox, index) => {
+      console.log("[v0] Adding listener to category checkbox:", checkbox.id)
+      checkbox.addEventListener("change", (e) => {
+        console.log("[v0] Category checkbox changed:", e.target.id, e.target.checked)
+        applyFilters()
+      })
+    })
+
+    // Add event listeners to price range checkboxes
+    priceCheckboxes.forEach((checkbox, index) => {
+      console.log("[v0] Adding listener to price checkbox:", checkbox.id)
+      checkbox.addEventListener("change", (e) => {
+        console.log("[v0] Price checkbox changed:", e.target.id, e.target.checked)
+        applyFilters()
+      })
+    })
+
+    const searchInput = document.getElementById("searchInput")
+    if (searchInput) {
+      const debouncedSearch = debounce(applyFilters, 500)
+      searchInput.addEventListener("input", debouncedSearch)
+
+      // Also trigger search on Enter key
+      searchInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault()
+          applyFilters()
+        }
+      })
+    }
+  }
 
   // --- LOGIN PAGE LOGIC ---
   const form = document.getElementById("loginForm")
