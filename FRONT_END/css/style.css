@@ -1,429 +1,583 @@
 /* CSS Variables for consistent theming */
 :root {
-    --primary-color: #101935;
-    --secondary-color: #564787;
-    --accent-color: #F2FDFF;
-    --text-dark: #564787;
-    --text-light: #9AD4D6;
-    --bg-light: #F2FDFF;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --border-radius: 8px;
-    --nav-color: #ffffff;
+  --primary-color: #101935;
+  --secondary-color: #564787;
+  --accent-color: #f2fdff;
+  --text-dark: #564787;
+  --text-light: #9ad4d6;
+  --bg-light: #f2fdff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --nav-color: #ffffff;
 }
 
 /* Global Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    padding-top: 80px; /* To prevent content being hidden under fixed nav */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: var(--text-dark);
+  padding-top: 80px; /* To prevent content being hidden under fixed nav */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
 }
 /*==========================*/
 
 /* Navigation Styles for Horizontal Layout */
 nav {
-    padding: 1rem 2rem;
-    box-shadow: var(--shadow);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: var(--nav-color)
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--nav-color);
 }
 
 nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 nav a[href="#"] {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: var(--primary-color);
-    text-decoration: none;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-decoration: none;
 }
 
 nav ul {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-    margin: 0;
-    padding: 0;
-    align-items:center;
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
 }
 
 nav ul li a {
-    color: var(--primary-color);
-    text-decoration: none;
-    padding: 0.5rem 1.5rem;
-    border-radius: var(--border-radius);
-    transition: all 0.3s ease;
-    font-weight: 500;
+  color: var(--primary-color);
+  text-decoration: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 nav ul li a:hover {
-    background-color: transparent;
-    text-decoration: underline;
-    text-underline-offset: 5px;
-    color: var(--primary-color);
-    transition: all 0.5s ease;
-
+  background-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  color: var(--primary-color);
+  transition: all 0.5s ease;
 }
 
+/* Updated profile dropdown styles for initials and smaller signout */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
 
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.profile-btn:hover {
+  background-color: rgba(86, 71, 135, 0.1);
+}
+
+/* Profile avatar showing initials */
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.profile-btn i {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.profile-dropdown.show .profile-btn i {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid rgba(86, 71, 135, 0.2);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Dropdown header with user info */
+.dropdown-header {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(86, 71, 135, 0.1);
+}
+
+.user-info {
+  text-align: left;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.user-email {
+  font-size: 0.8rem;
+  color: var(--secondary-color);
+  opacity: 0.8;
+}
+
+.dropdown-divider {
+  margin: 0;
+  border: none;
+  border-top: 1px solid rgba(86, 71, 135, 0.1);
+}
+
+/* Smaller signout option */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.sign-out-item {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  color: #dc3545;
+  border-radius: 3px;
+  margin: 0.15rem 0.3rem;
+  transition: all 0.2s ease;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+.sign-out-item:hover {
+  background-color: rgba(220, 53, 69, 0.06);
+  color: #dc3545;
+  transform: translateX(1px);
+  text-decoration: none;
+}
+
+.sign-out-item i {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(86, 71, 135, 0.1);
+  text-decoration: none;
+}
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-    }
-    
-    nav ul {
-        flex-direction: column;
-        gap: 1rem;
-        width: 100%;
-        text-align: center;
-    }
-    
-    nav ul li {
-        width: 100%;
-    }
-    
-    nav ul li a {
-        display: block;
-        width: 100%;
-    }
+  nav {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  nav ul li {
+    width: 100%;
+  }
+
+  nav ul li a {
+    display: block;
+    width: 100%;
+  }
+
+  /* Mobile responsive profile dropdown */
+  .profile-dropdown {
+    width: 100%;
+  }
+
+  .profile-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dropdown-menu {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
 }
 
 /*==========================*/
 
 /* Hero Section */
 .hero {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-    text-align: center;
-    padding: 100px 0;
-    position: relative;
-    overflow:hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+  text-align: center;
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero > div{
-    position: relative;
-    z-index: 2;
+.hero > div {
+  position: relative;
+  z-index: 2;
 }
 
 .hero h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
 }
 
 .hero button {
-    transform-origin: center center;
-    background-color: var(--accent-color);
-    border: 2px solid transparent;
-    color:var(--primary-color);
-    font-weight:bold;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
-    transition: all 0.5s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform-origin: center center;
+  background-color: var(--accent-color);
+  border: 2px solid transparent;
+  color: var(--primary-color);
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .hero button:hover {
-    background-color: transparent;
-    border-color:var(--accent-color);
-    box-shadow: 0 6px 20px #D2C1B6;
-    transform: scale(1.05);
-    color:var(--accent-color)
+  background-color: transparent;
+  border-color: var(--accent-color);
+  box-shadow: 0 6px 20px #d2c1b6;
+  transform: scale(1.05);
+  color: var(--accent-color);
 }
 
 /* homepage hero */
-.Home .hero{
-    height: 80vh;
+.Home .hero {
+  height: 80vh;
 }
 
 /* Services Section */
 .services h2 {
-    text-align: center;
-    margin-bottom: 3rem;
-    color: var(--primary-color);
-    font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--primary-color);
+  font-weight: 700;
 }
 
 .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    padding: 30px;
-    margin-bottom: 5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 30px;
+  margin-bottom: 5%;
 }
 
 .cards div {
-    text-align: center;
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    background: white;
-    box-shadow: var(--shadow);
-    transition: transform 0.3s ease;
+  text-align: center;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  background: white;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
 }
 
 .cards div:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .cards img {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 1rem;
-    background-color: var(--secondary-color);
-    border-radius: 50%;
-    padding: 15px;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+  background-color: var(--secondary-color);
+  border-radius: 50%;
+  padding: 15px;
 }
 
 .cards h3 {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
-
 
 /*==========================*/
 /* Marketplace Page Design */
-.Marketplace .hero{
-    height: 50vh;
+.Marketplace .hero {
+  height: 50vh;
 }
 
-.Marketplace .Aside{
-    width: 25%;
-    float: left;
-    padding: 20px;
-    background-color: #f4f4f4;
-    box-shadow: var(--shadow);
-    border-radius: var(--border-radius);
-    margin-right: 20px;
+.Marketplace .Aside {
+  width: 25%;
+  float: left;
+  padding: 20px;
+  background-color: #f4f4f4;
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius);
+  margin-right: 20px;
 }
 
-.Marketplace .Aside h3{
-    margin:15px 0 15px 0;
-    color: var(--primary-color);
+.Marketplace .Aside h3 {
+  margin: 15px 0 15px 0;
+  color: var(--primary-color);
 }
 
-.Marketplace .cards button{
-    margin-top: 10px;
-    background-color: var(--primary-color);
-    border: 2px solid transparent;
-    color:var(--accent-color);
-    font-weight:bold;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    transition: all 0.3s ease;
+.Marketplace .cards button {
+  margin-top: 10px;
+  background-color: var(--primary-color);
+  border: 2px solid transparent;
+  color: var(--accent-color);
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
 }
-.Marketplace .cards button:hover{
-    background-color: var(--accent-color);
-    border-color:var(--primary-color);
-    color:var(--primary-color);
-}
-
-.Marketplace .Aside button{
-    border: none;
-}
-.Marketplace input[type="checkbox"]{
-    margin-right: 10px;
-    transform: scale(1.2);
-    cursor: pointer;
+.Marketplace .cards button:hover {
+  background-color: var(--accent-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
-
-.Marketplace .cards img{
-    width: 100%;
-    height: 180px;         /* Set a fixed height for consistency */
-    object-fit: cover;     /* Ensures the image covers the box without distortion */
-    margin-bottom: 1rem;
-    background-color: var(--secondary-color);
-    border-radius: var(--border-radius);
-    padding: 0;            /* Remove padding so image fills the card */
-    display: block;
+.Marketplace .Aside button {
+  border: none;
+}
+.Marketplace input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+  cursor: pointer;
 }
 
-.Cart .product-container img{
-    width: 100%;
-    height: 180px;         /* Set a fixed height for consistency */
-    object-fit: cover;     /* Ensures the image covers the box without distortion */
-    margin-bottom: 1rem;
-    background-color: var(--secondary-color);
-    border-radius: var(--border-radius);
-    padding: 0;            /* Remove padding so image fills the card */
-    display: block;
+.Marketplace .cards img {
+  width: 100%;
+  height: 180px; /* Set a fixed height for consistency */
+  object-fit: cover; /* Ensures the image covers the box without distortion */
+  margin-bottom: 1rem;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  padding: 0; /* Remove padding so image fills the card */
+  display: block;
+}
+
+.Cart .product-container img {
+  width: 100%;
+  height: 180px; /* Set a fixed height for consistency */
+  object-fit: cover; /* Ensures the image covers the box without distortion */
+  margin-bottom: 1rem;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  padding: 0; /* Remove padding so image fills the card */
+  display: block;
 }
 
 /*==========================*/
 /* Login Page Design */
 
-.Login .login-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;  
-    height: 85vh;
-    width: auto;
-    margin-bottom: 5%;
+.Login .login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 85vh;
+  width: auto;
+  margin-bottom: 5%;
 }
 
-.Login .login-container>div{
-    padding: 20px;
-    box-shadow:var(--secondary-color) 0px 0px 10px 0px;
-    border-radius: var(--border-radius);    
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-    width: 500px;
-    height: 65vh;
-    text-align: center;
+.Login .login-container > div {
+  padding: 20px;
+  box-shadow: var(--secondary-color) 0px 0px 10px 0px;
+  border-radius: var(--border-radius);
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+  width: 500px;
+  height: 65vh;
+  text-align: center;
 }
 
-.Login .login-form h1{
-    margin-bottom: 20px;
-    color: var(--accent-color);
-    font-weight: 700;
+.Login .login-form h1 {
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  font-weight: 700;
 }
-.Login .login-form p{
-    margin-bottom: 20px;
-    color: var(--nav-color);
-    font-weight: 300;
+.Login .login-form p {
+  margin-bottom: 20px;
+  color: var(--nav-color);
+  font-weight: 300;
 }
 
 .Login .login-form input[type="text"],
-.Login .login-form input[type="password"]{
-    width: 80%;
-    padding: 5px;
-    margin: 10px 0;
-    border: 1px solid var(--secondary-color);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
+.Login .login-form input[type="password"] {
+  width: 80%;
+  padding: 5px;
+  margin: 10px 0;
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
 }
 .Login .login-form input[type="text"]:focus,
-.Login .login-form input[type="password"]:focus{
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 5px var(--bg-light);
+.Login .login-form input[type="password"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 5px var(--bg-light);
 }
 
-.Login .login-form button{
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: var(--accent-color);
-    border: 1px solid transparent;
-    color:var(--primary-color);
-    font-weight:bold;
-    padding: 8px;
-    width: 80px;
-    border-radius: var(--border-radius);
-    transition: all 0.5s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.Login .login-form button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: var(--accent-color);
+  border: 1px solid transparent;
+  color: var(--primary-color);
+  font-weight: bold;
+  padding: 8px;
+  width: 80px;
+  border-radius: var(--border-radius);
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.Login .login-form button:hover{
-    background-color: var(--primary-color);
-    border-color:var(--accent-color);
-    box-shadow: 0 6px 20px #958a83;
-    transform: scale(1.05);
-    color:var(--accent-color)
+.Login .login-form button:hover {
+  background-color: var(--primary-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 6px 20px #958a83;
+  transform: scale(1.05);
+  color: var(--accent-color);
 }
-
 
 /*==========================*/
 
 /* Sign-Up Page Design */
 .Sign-Up .signup-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Changed from center to flex-start */
-    flex-direction: column;  
-    min-height: calc(100vh - 70px); /* Ensures container is visible below nav */
-    margin-top: 40px; /* Adds space below nav */
-    margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Changed from center to flex-start */
+  flex-direction: column;
+  min-height: calc(100vh - 70px); /* Ensures container is visible below nav */
+  margin-top: 40px; /* Adds space below nav */
+  margin-bottom: 5%;
 }
 
 .Sign-Up .signup-container > div {
-    padding: 20px;
-    box-shadow: var(--secondary-color) 0px 0px 10px 0px;
-    border-radius: var(--border-radius);    
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-    width: 500px;
-    min-height: 75vh;
-    text-align: center;
-    margin: 0 auto; /* Center horizontally */
+  padding: 20px;
+  box-shadow: var(--secondary-color) 0px 0px 10px 0px;
+  border-radius: var(--border-radius);
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+  width: 500px;
+  min-height: 75vh;
+  text-align: center;
+  margin: 0 auto; /* Center horizontally */
 }
 
 .Sign-Up .signup-container h1 {
-    margin-bottom: 20px;
-    color: var(--accent-color);
-    font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  font-weight: 700;
 }
 
 .Sign-Up .signup-container p {
-    margin-bottom: 20px;
-    color: var(--accent-color);
-    font-weight: 300;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  font-weight: 300;
 }
 
 .Sign-Up .signup-container .form input[type="text"],
 .Sign-Up .signup-container .form input[type="password"] {
-    width: 80%;
-    padding: 7px 10px; /* Reduced height */
-    margin: 20px 0;
-    border: 1px solid var(--secondary-color);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    height: 30px; /* Explicitly set a smaller height */
-    box-sizing: border-box;
+  width: 80%;
+  padding: 7px 10px; /* Reduced height */
+  margin: 20px 0;
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  height: 30px; /* Explicitly set a smaller height */
+  box-sizing: border-box;
 }
 
 .Sign-Up .signup-container .form input[type="text"]:focus,
 .Sign-Up .signup-container .form input[type="password"]:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 5px var(--accent-color);
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 5px var(--accent-color);
 }
 
 .Sign-Up .signup-container .form button {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: var(--accent-color);
-    border: 1px solid transparent;
-    color: var(--primary-color);
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    transition: all 0.5s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: var(--accent-color);
+  border: 1px solid transparent;
+  color: var(--primary-color);
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .Sign-Up .signup-container .form button:hover {
-    background-color: var(--primary-color);
-    border-color: var(--accent-color);
-    box-shadow: 0 6px 20px #D2C1B6;
-    transform: scale(1.05);
-    color: var(--accent-color);
+  background-color: var(--primary-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 6px 20px #d2c1b6;
+  transform: scale(1.05);
+  color: var(--accent-color);
 }
 
 /*==========================*/
@@ -431,436 +585,433 @@ nav ul li a:hover {
 
 /* Sell Page Styles */
 .Sell .container {
-    max-width: 700px;
-    margin: 40px auto 0 auto;
-    background: #f8fafc;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    padding: 2.5rem 2rem 2rem 2rem;
-    margin-bottom: 5%;
+  max-width: 700px;
+  margin: 40px auto 0 auto;
+  background: #f8fafc;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin-bottom: 5%;
 }
 
 .Sell .hero {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding: 1.5rem 0 1rem 0;
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-    border-radius: var(--border-radius);
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(27,60,83,0.07);
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem 0 1rem 0;
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+  border-radius: var(--border-radius);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(27, 60, 83, 0.07);
 }
 
 .Sell .hero h1 {
-    font-size: 2.3rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .Sell .hero p {
-    font-size: 1.1rem;
-    opacity: 0.95;
+  font-size: 1.1rem;
+  opacity: 0.95;
 }
 
 .Sell .form-container {
-    background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 8px rgba(27,60,83,0.05);
-    padding: 2rem 1.5rem 1.5rem 1.5rem;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(27, 60, 83, 0.05);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
 }
 
 .Sell form label {
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-top: 1rem;
-    margin-bottom: 0.3rem;
-    display: block;
-    text-align: left;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  display: block;
+  text-align: left;
 }
 
 .Sell form input[type="text"],
 .Sell form textarea,
 .Sell form select {
-    width: 100%;
-    padding: 8px 12px;
-    margin-bottom: 1rem;
-    border: 1px solid var(--secondary-color);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    background: #f4f8fb;
-    transition: border-color 0.3s;
-    resize: none;
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background: #f4f8fb;
+  transition: border-color 0.3s;
+  resize: none;
 }
 
 .Sell form input[type="text"]:focus,
 .Sell form textarea:focus,
 .Sell form select:focus {
-    border-color: var(--accent-color);
-    outline: none;
-    background: #fff;
+  border-color: var(--accent-color);
+  outline: none;
+  background: #fff;
 }
 
 .Sell form textarea {
-    min-height: 80px;
-    max-height: 200px;
+  min-height: 80px;
+  max-height: 200px;
 }
 
 .Sell form input[type="checkbox"] {
-    margin-right: 8px;
-    accent-color: var(--primary-color);
-    transform: scale(1.1);
+  margin-right: 8px;
+  accent-color: var(--primary-color);
+  transform: scale(1.1);
 }
 
 .Sell form label[for="item-image"] {
-    margin-top: 1.2rem;
-    margin-bottom: 0.5rem;
+  margin-top: 1.2rem;
+  margin-bottom: 0.5rem;
 }
 
 .Sell .drag-drop-area {
-    border: 2px dashed var(--secondary-color);
-    border-radius: var(--border-radius);
-    background-color: #cfd7df;
-    padding: 1.5rem;
-    text-align: center;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition: border-color 0.3s, background 0.3s;
+  border: 2px dashed var(--secondary-color);
+  border-radius: var(--border-radius);
+  background-color: #cfd7df;
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s, background 0.3s;
 }
 
 .Sell .drag-drop-area:hover,
 .Sell .drag-drop-area:focus {
-    border-color: var(--accent-color);
-
+  border-color: var(--accent-color);
 }
 
 .Sell .drag-drop-content svg {
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
 }
 
 .Sell .drag-drop-text {
-    font-weight: 600;
-    color: var(--primary-color);
-    margin-bottom: 0.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 0.2rem;
 }
 
 .Sell .drag-drop-subtext {
-    color: var(--secondary-color);
-    font-size: 0.97rem;
-    margin-bottom: 0.2rem;
+  color: var(--secondary-color);
+  font-size: 0.97rem;
+  margin-bottom: 0.2rem;
 }
 
 .Sell .browse-link {
-    color: var(--text-dark);
-    text-decoration: underline;
-    cursor: pointer;
+  color: var(--text-dark);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .Sell .form-note {
-    color: var(--primary-color);
-    font-size: 0.9rem;
-    margin-top: 0.2rem;
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
 }
 .Sell form button[type="submit"] {
-    display: block;
-    margin: 1.2rem auto 0 auto; /* Center horizontally */
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 0.7rem 2.2rem;
-    font-weight: bold;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: background 0.3s, color 0.3s, transform 0.2s;
+  display: block;
+  margin: 1.2rem auto 0 auto; /* Center horizontally */
+  background-color: var(--primary-color);
+  color: var(--accent-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.7rem 2.2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: background 0.3s, color 0.3s, transform 0.2s;
 }
 
 .Sell form button[type="submit"]:hover {
-    background-color: var(--accent-color);
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    transform: scale(1.05);
+  background-color: var(--accent-color);
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  transform: scale(1.05);
 }
 /* Inline checkbox and label for terms agreement */
 .Sell form .terms-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
 }
 
 .Sell form .terms-row input[type="checkbox"] {
-    margin: 0;
-    transform: scale(1.1);
+  margin: 0;
+  transform: scale(1.1);
 }
 
 .Sell form .terms-row label {
-    margin: 0;
-    font-weight: 500;
-    color: var(--text-dark);
-    cursor: pointer;
+  margin: 0;
+  font-weight: 500;
+  color: var(--text-dark);
+  cursor: pointer;
 }
 
 /*==========================*/
 /* Cart Page Styles */
 .Cart .main-container {
-    max-width: 900px;
-    margin: 50px auto 0 auto;
-    background: var(--bg-light);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    padding: 2.5rem 2rem 2rem 2rem;
-    min-height: 60vh;
-    margin-bottom: 5%;
+  max-width: 900px;
+  margin: 50px auto 0 auto;
+  background: var(--bg-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-height: 60vh;
+  margin-bottom: 5%;
 }
 
 .Cart .product-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .Cart .product-container > div {
-    background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 8px rgba(86, 71, 135, 0.07);
-    padding: 1.5rem 1rem;
-    text-align: center;
-    transition: transform 0.3s;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(86, 71, 135, 0.07);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: transform 0.3s;
 }
 
 .Cart .product-container > div:hover {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 6px 20px rgba(86, 71, 135, 0.12);
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(86, 71, 135, 0.12);
 }
 
 .Cart .product-container h1 {
-    font-size: 1.5rem;
-    color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .Cart .product-container p {
-    color: var(--secondary-color);
-    margin-bottom: 0.3rem;
-    font-size: 1rem;
+  color: var(--secondary-color);
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
 }
 
 .Cart button {
-    display: block;
-    margin: 2rem auto 0 auto;
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-    border: none;
-    border-radius: var(--border-radius);
-    padding: 0.9rem 2.5rem;
-    font-weight: bold;
-    font-size: 1.15rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: background 0.3s, color 0.3s, transform 0.2s;
+  display: block;
+  margin: 2rem auto 0 auto;
+  background-color: var(--primary-color);
+  color: var(--accent-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.9rem 2.5rem;
+  font-weight: bold;
+  font-size: 1.15rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: background 0.3s, color 0.3s, transform 0.2s;
 }
 
 .Cart button:hover {
-    background-color: var(--accent-color);
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
-    transform: scale(1.05);
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  transform: scale(1.05);
 }
-
 
 /* Footer Styles */
 footer {
-    background-color: #0f1921;
-    color: var(--text-light);
-    padding: 1rem 0 0.1rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f1921;
+  color: var(--text-light);
+  padding: 1rem 0 0.1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .link-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
 .link-container > div {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Brand Section */
 .link-container div:first-child h3 {
-    color: var(--bg-light);
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  color: var(--bg-light);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .link-container div:first-child p {
-    color: var(--text-light);
-    line-height: 1.6;
-    font-size: 1rem;
-    opacity: 0.9;
+  color: var(--text-light);
+  line-height: 1.6;
+  font-size: 1rem;
+  opacity: 0.9;
 }
 
 /* Quick Links Section */
 .link-container div:nth-child(2) h3 {
-    color: var(--bg-light);
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  color: var(--bg-light);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .link-container div:nth-child(2) a {
-    display: block;
-    color: var(--text-light);
-    text-decoration: none;
-    margin-bottom: 0.8rem;
-    padding: 0.5rem 0;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    border-left: 3px solid transparent;
-    padding-left: 1rem;
+  display: block;
+  color: var(--text-light);
+  text-decoration: none;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  padding-left: 1rem;
 }
 
 .link-container div:nth-child(2) a:hover {
-    color: var(--bg-light);
-    border-left-color: var(--accent-color);
-    transform: translateX(5px);
-    background: linear-gradient(90deg, rgba(210, 193, 182, 0.1), transparent);
+  color: var(--bg-light);
+  border-left-color: var(--accent-color);
+  transform: translateX(5px);
+  background: linear-gradient(90deg, rgba(210, 193, 182, 0.1), transparent);
 }
 
 /* Contact Section */
 .link-container div:nth-child(3) h3 {
-    color: var(--bg-light);
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+  color: var(--bg-light);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .link-container div:nth-child(3) p {
-    color: var(--text-light);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
 }
 
 .link-container div:nth-child(3) p:before {
-    content: "•";
-    color: var(--accent-color);
-    font-weight: bold;
-    font-size: 1.2rem;
+  content: "•";
+  color: var(--accent-color);
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 /* Footer Bottom Section */
 footer hr {
-    border: none;
-    border-top: 1px solid var(--bg-light);
-    margin: 2.5rem auto 1.5rem;
-    max-width: 1200px;
-    width: calc(100% - 4rem);
-    opacity: 0.3;
+  border: none;
+  border-top: 1px solid var(--bg-light);
+  margin: 2.5rem auto 1.5rem;
+  max-width: 1200px;
+  width: calc(100% - 4rem);
+  opacity: 0.3;
 }
 
 footer > div:last-child {
-    text-align: center;
-    padding: 0 2rem;
+  text-align: center;
+  padding: 0 2rem;
 }
 
 footer > div:last-child p {
-    color: var(--accent-color);
-    font-size: 0.9rem;
-    opacity: 0.8;
-    font-weight: 500;
+  color: var(--accent-color);
+  font-size: 0.9rem;
+  opacity: 0.8;
+  font-weight: 500;
 }
 
 /* Decorative Elements */
 footer::before {
-    content: "";
-    display: block;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--accent-color));
-    margin-bottom: 2rem;
+  content: "";
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-color), var(--secondary-color), var(--accent-color));
+  margin-bottom: 2rem;
 }
 
 /* Hover Effects for Entire Footer Sections */
 .link-container > div {
-    transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .link-container > div:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .link-container {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-        text-align: center;
-    }
-    
-    .link-container div:nth-child(2) a {
-        border-left: none;
-        border-bottom: 2px solid transparent;
-        padding-left: 0;
-        padding-bottom: 0.5rem;
-    }
-    
-    .link-container div:nth-child(2) a:hover {
-        border-left-color: transparent;
-        border-bottom-color: var(--accent-color);
-        transform: translateY(-2px);
-    }
-    
-    .link-container div:nth-child(3) p {
-        justify-content: center;
-    }
-    
-    footer {
-        padding: 2rem 0 1rem;
-    }
+  .link-container {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    text-align: center;
+  }
+
+  .link-container div:nth-child(2) a {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding-left: 0;
+    padding-bottom: 0.5rem;
+  }
+
+  .link-container div:nth-child(2) a:hover {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent-color);
+    transform: translateY(-2px);
+  }
+
+  .link-container div:nth-child(3) p {
+    justify-content: center;
+  }
+
+  footer {
+    padding: 2rem 0 1rem;
+  }
 }
 
 @media (max-width: 480px) {
-    .link-container {
-        padding: 0 1rem;
-    }
-    
-    .link-container div:first-child h3 {
-        font-size: 1.5rem;
-    }
-    
-    .link-container div:nth-child(2) h3,
-    .link-container div:nth-child(3) h3 {
-        font-size: 1.1rem;
-    }
+  .link-container {
+    padding: 0 1rem;
+  }
+
+  .link-container div:first-child h3 {
+    font-size: 1.5rem;
+  }
+
+  .link-container div:nth-child(2) h3,
+  .link-container div:nth-child(3) h3 {
+    font-size: 1.1rem;
+  }
 }
 
 /* Animation for footer appearance */
 footer {
-    animation: fadeInUp 0.8s ease-out;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-

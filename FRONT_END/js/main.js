@@ -1,7 +1,108 @@
 console.log("[v0] Frontend main.js loaded successfully")
 
+function updateNavbarForAuthState() {
+  const authToken = localStorage.getItem("authToken")
+  const userData = localStorage.getItem("user")
+  const loginLink = document.querySelector("nav ul li:last-child")
+
+  if (authToken && userData) {
+    try {
+      const user = JSON.parse(userData)
+      const userName = user.full_name || user.username || user.email || "User"
+      const userEmail = user.email || ""
+
+      const getInitials = (name) => {
+        return name
+          .split(" ")
+          .map((word) => word.charAt(0).toUpperCase())
+          .slice(0, 2)
+          .join("")
+      }
+
+      const userInitials = getInitials(userName)
+
+      loginLink.innerHTML = `
+        <div class="profile-dropdown">
+          <button class="profile-btn" id="profileBtn" title="${userName}${userEmail ? "\n" + userEmail : ""}">
+            <div class="profile-avatar">${userInitials}</div>
+            <i class='bx bx-chevron-down'></i>
+          </button>
+          <div class="dropdown-menu" id="profileDropdown">
+            <div class="dropdown-header">
+              <div class="user-info">
+                <div class="user-name">${userName}</div>
+                ${userEmail ? `<div class="user-email">${userEmail}</div>` : ""}
+              </div>
+            </div>
+            <hr class="dropdown-divider">
+            <a href="#" class="dropdown-item sign-out-item" id="signOutBtn">
+              <i class='bx bx-log-out'></i>
+              Sign Out
+            </a>
+          </div>
+        </div>
+      `
+
+      // Add event listeners for dropdown functionality
+      const profileBtn = document.getElementById("profileBtn")
+      const profileDropdown = document.getElementById("profileDropdown")
+      const signOutBtn = document.getElementById("signOutBtn")
+
+      // Toggle dropdown on profile button click
+      profileBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        profileDropdown.classList.toggle("show")
+      })
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+          profileDropdown.classList.remove("show")
+        }
+      })
+
+      // Handle sign out
+      signOutBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        handleSignOut()
+      })
+    } catch (error) {
+      console.error("[v0] Error parsing user data:", error)
+      // Fallback to login link if user data is corrupted
+      showLoginLink()
+    }
+  } else {
+    showLoginLink()
+  }
+}
+
+function showLoginLink() {
+  const loginLink = document.querySelector("nav ul li:last-child")
+  loginLink.innerHTML = '<a href="Login.html">Login</a>'
+}
+
+function handleSignOut() {
+  // Clear authentication data
+  localStorage.removeItem("authToken")
+  localStorage.removeItem("user")
+
+  console.log("[v0] User signed out successfully")
+
+  // Update navbar immediately
+  showLoginLink()
+
+  // Redirect to home page after a short delay
+  setTimeout(() => {
+    window.location.href = "index.html"
+  }, 300)
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[v0] DOM loaded, initializing authentication")
+
+  // Update navbar based on auth state
+  updateNavbarForAuthState()
 
   // --- LOGIN PAGE LOGIC ---
   const form = document.getElementById("loginForm")
