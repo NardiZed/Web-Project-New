@@ -27,7 +27,7 @@
             <p>Reach millions of buyers by listing your items on Universal Marketplace.</p>
         </div>
         <div class="form-container">
-             Made form functional with proper IDs and event handling 
+            <!-- Made form functional with proper IDs and event handling -->
             <form id="sellForm" action="">
                 <label for="itemName">Item name</label><br>
                 <input type="text" id="itemName" name="itemName" required><br>
@@ -56,7 +56,7 @@
                 <input type="hidden" id="stockQuantity" name="stockQuantity" value="1">
                 
                 <label for="item-image">Item Image</label>
-                 Made drag-drop area clickable to open file browser 
+                <!-- Made drag-drop area clickable to open file browser -->
                 <div class="drag-drop-area" id="drag-drop-area">
                     <div class="drag-drop-content">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -65,6 +65,15 @@
                         <p class="drag-drop-text">Drag and drop your image here</p>
                         <p class="drag-drop-subtext">or <span class="browse-link">browse to choose a file</span></p>
                         <p class="form-note">Upload a high-quality image of your item (JPEG, PNG).</p>
+                    </div>
+                    <!-- Added image preview container -->
+                    <div id="imagePreview" class="image-preview" style="display: none;">
+                        <img id="previewImg" src="/placeholder.svg" alt="Preview">
+                        <button type="button" class="delete-image-btn" id="deleteImageBtn" title="Delete image">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <input type="file" id="item-image" accept="image/*" required aria-label="Upload item image" style="display: none;">
@@ -75,36 +84,36 @@
                 </div>
                 <small class="error" style="visibility: hidden;"></small>
                 
-                 Made list item button functional 
+                <!-- Made list item button functional -->
                 <button type="submit" id="submitBtn">List Item</button>
             </form>
         </div>
     </div>
     <footer>
-    <div class="link-container">
-        <div>
-            <h3>Universal Market</h3>
-            <p>Your one-stop shop for everything from cars to everyday essentials.</p>
+        <div class="link-container">
+            <div>
+                <h3>Universal Market</h3>
+                <p>Your one-stop shop for everything from cars to everyday essentials.</p>
+            </div>
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="Marketplace.html">Marketplace</a>
+                <a href="Sell.html">Sell</a>
+                <a href="cart.html">Cart</a>
+                <a href="Login.html">Login</a>
+            </div>
+            <div>
+                <h3>Contact</h3>
+                <p>Email: support@universalmarket.com</p>
+                <p>Phone: (555) 123-4567</p>
+            </div>
         </div>
+        <hr>
         <div>
-            <h3>Quick Links</h3>
-            <a href="index.html">Home</a>
-            <a href="Marketplace.html">Marketplace</a>
-            <a href="Sell.html">Sell</a>
-            <a href="cart.html">Cart</a>
-            <a href="Login.html">Login</a>
+            <p>© 2025 Universal Marketplace. All rights reserved.</p>
         </div>
-        <div>
-            <h3>Contact</h3>
-            <p>Email: support@universalmarket.com</p>
-            <p>Phone: (555) 123-4567</p>
-        </div>
-    </div>
-    <hr>
-    <div>
-        <p>© 2025 Universal Marketplace. All rights reserved.</p>
-    </div>
-</footer>
-<script src="./js/main.js"></script>
+    </footer>
+    <script src="./js/main.js"></script>
 </body>
 </html>

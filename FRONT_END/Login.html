@@ -35,9 +35,9 @@
                 </div>
 
                 <div class="form-group password-field" style="position:relative; display:inline-block; width:80%; margin-top:0.6rem;">
-                     Made password field same size as name field 
-                    <input type="password" id="password" required placeholder="Enter your Password" style="width:100%; padding:10px; padding-right:2.5rem; height:45px;">
-                    <i id="togglePassword" class="bx bx-hide" title="Show password" style="position:absolute; right:8px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:1.15rem; color:var(--primary-color);"></i>
+                    <!-- Fixed password field to prevent icon overflow -->
+                    <input type="password" id="password" required placeholder="Enter your Password" style="width:100%; padding:10px; padding-right:45px; height:45px;">
+                    <i id="togglePassword" class="bx bx-hide" title="Show password" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:1.2rem; color:var(--primary-color);"></i>
                     <br>
                     <small class="error" aria-live="polite" style="color:#b00020;"></small>
                 </div>

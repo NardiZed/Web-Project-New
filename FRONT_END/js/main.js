@@ -229,24 +229,70 @@ function initializeSellPage() {
   const dragDropArea = document.getElementById("drag-drop-area")
   const fileInput = document.getElementById("item-image")
   const browseLink = document.querySelector(".browse-link")
+  const imagePreview = document.getElementById("imagePreview")
+  const previewImg = document.getElementById("previewImg")
+  const deleteImageBtn = document.getElementById("deleteImageBtn")
+  let selectedFile = null
 
   if (dragDropArea && fileInput) {
     // Make drag-drop area clickable to open file browser
     dragDropArea.addEventListener("click", (e) => {
       e.preventDefault()
+      // Don't open file browser if clicking on delete button
+      if (e.target.closest(".delete-image-btn")) {
+        return
+      }
       fileInput.click()
     })
 
-    // Handle file selection
     fileInput.addEventListener("change", (e) => {
       if (e.target.files.length > 0) {
-        const fileName = e.target.files[0].name
-        const dragDropText = dragDropArea.querySelector(".drag-drop-text")
-        if (dragDropText) {
-          dragDropText.textContent = `Selected: ${fileName}`
+        selectedFile = e.target.files[0]
+        const fileName = selectedFile.name
+
+        // Show preview
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          if (previewImg && imagePreview) {
+            previewImg.src = event.target.result
+            imagePreview.style.display = "block"
+
+            // Hide the drag-drop content
+            const dragDropContent = dragDropArea.querySelector(".drag-drop-content")
+            if (dragDropContent) {
+              dragDropContent.style.display = "none"
+            }
+          }
         }
+        reader.readAsDataURL(selectedFile)
+
+        console.log("[v0] Image selected:", fileName)
       }
     })
+
+    if (deleteImageBtn) {
+      deleteImageBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        // Clear the file input
+        fileInput.value = ""
+        selectedFile = null
+
+        // Hide preview
+        if (imagePreview) {
+          imagePreview.style.display = "none"
+        }
+
+        // Show drag-drop content again
+        const dragDropContent = dragDropArea.querySelector(".drag-drop-content")
+        if (dragDropContent) {
+          dragDropContent.style.display = "block"
+        }
+
+        console.log("[v0] Image deleted")
+      })
+    }
 
     // Handle drag and drop events
     dragDropArea.addEventListener("dragover", (e) => {
@@ -268,12 +314,14 @@ function initializeSellPage() {
 
       const files = e.dataTransfer.files
       if (files.length > 0) {
-        fileInput.files = files
-        const fileName = files[0].name
-        const dragDropText = dragDropArea.querySelector(".drag-drop-text")
-        if (dragDropText) {
-          dragDropText.textContent = `Selected: ${fileName}`
-        }
+        // Create a new DataTransfer object to set files
+        const dataTransfer = new DataTransfer()
+        dataTransfer.items.add(files[0])
+        fileInput.files = dataTransfer.files
+
+        // Trigger change event
+        const event = new Event("change", { bubbles: true })
+        fileInput.dispatchEvent(event)
       }
     })
   }
@@ -521,10 +569,10 @@ async function initializeMarketplace() {
 
 // Update the selected filters count
 function updateSelectedCount() {
-  const countSpan = document.querySelector(".Categories span")
+  const countSpan = document.getElementById("selectedCount")
   if (countSpan) {
     const totalSelected = selectedCategories.length + selectedPriceRanges.length
-    countSpan.innerHTML = `${totalSelected} selected <button onclick="selectAllFilters()">Select All</button> <button onclick="clearAllFilters()">Clear All</button>`
+    countSpan.textContent = `${totalSelected} selected`
   }
 }
 
@@ -716,6 +764,9 @@ async function handleSellForm(event) {
     error.style.visibility = "hidden"
   })
 
+  const fileInput = document.getElementById("item-image")
+  const uploadedFile = fileInput.files[0]
+
   const formData = {
     name: document.getElementById("itemName").value.trim(),
     price: document.getElementById("itemPrice").value,
@@ -723,6 +774,7 @@ async function handleSellForm(event) {
     category: document.getElementById("itemCategory").value,
     stock_quantity: document.getElementById("stockQuantity").value || 1,
     image_url: "/placeholder.svg?height=300&width=300", // Default placeholder
+    uploaded_file: uploadedFile ? uploadedFile.name : null,
   }
 
   // Basic validation
@@ -755,11 +807,19 @@ async function handleSellForm(event) {
   submitBtn.textContent = "Listing Item..."
 
   try {
+    // For now, we'll simulate the upload and save to database
+    if (uploadedFile) {
+      console.log("[v0] File to upload:", uploadedFile.name, uploadedFile.size, "bytes")
+      // TODO: Implement actual file upload to server/database
+      // const uploadedUrl = await uploadFileToServer(uploadedFile)
+      // formData.image_url = uploadedUrl
+    }
+
     // Simulate API call (replace with actual backend call when available)
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    console.log("[v0] Item listed successfully:", formData)
-    alert("Item listed successfully! Redirecting to marketplace...")
+    console.log("[v0] Item listed successfully with data:", formData)
+    alert("Item listed successfully! Your image has been saved. Redirecting to marketplace...")
     window.location.href = "Marketplace.html"
   } catch (error) {
     console.error("[v0] Error listing item:", error)
@@ -767,170 +827,6 @@ async function handleSellForm(event) {
   } finally {
     submitBtn.disabled = false
     submitBtn.textContent = "List Item"
-  }
-}
-
-async function handleRegistration(event) {
-  event.preventDefault()
-  console.log("[v0] Signup form submitted")
-
-  const signupForm = document.querySelector(".signup-container form")
-  const name = document.getElementById("signupName")
-  const email = document.getElementById("signupEmail")
-  const phone = document.getElementById("signupPhone")
-  const password = document.getElementById("signupPassword")
-  const confirm = document.getElementById("signupConfirmPassword")
-  const togglePassword = document.getElementById("toggleSignupPassword")
-  const toggleConfirm = document.getElementById("toggleSignupConfirmPassword")
-  const fields = [name, email, phone, password, confirm]
-  const errors = fields.map((f) => f?.parentElement.querySelector("small.error"))
-
-  // Clear previous errors
-  errors.forEach((s) => {
-    if (s) {
-      s.textContent = ""
-      s.style.visibility = "hidden"
-    }
-  })
-
-  let valid = true
-
-  if (!name.value.trim()) {
-    errors[0].textContent = "Full name is required."
-    errors[0].style.visibility = "visible"
-    name.setAttribute("aria-invalid", "true")
-    valid = false
-  }
-  if (!email.value.trim()) {
-    errors[1].textContent = "Email address is required."
-    errors[1].style.visibility = "visible"
-    email.setAttribute("aria-invalid", "true")
-    valid = false
-  }
-  if (!phone.value.trim()) {
-    errors[2].textContent = "Phone number is required."
-    errors[2].style.visibility = "visible"
-    phone.setAttribute("aria-invalid", "true")
-    valid = false
-  }
-  if (!password.value) {
-    errors[3].textContent = "Password is required."
-    errors[3].style.visibility = "visible"
-    password.setAttribute("aria-invalid", "true")
-    valid = false
-  }
-  if (!confirm.value) {
-    errors[4].textContent = "Please confirm your password."
-    errors[4].style.visibility = "visible"
-    confirm.setAttribute("aria-invalid", "true")
-    valid = false
-  } else if (password.value && confirm.value && password.value !== confirm.value) {
-    errors[4].textContent = "Passwords do not match."
-    errors[4].style.visibility = "visible"
-    confirm.setAttribute("aria-invalid", "true")
-    valid = false
-  }
-
-  if (!valid) {
-    const firstVisibleErr = errors.find((s) => s && s.textContent.trim())
-    if (firstVisibleErr) {
-      const inputToFocus = firstVisibleErr.parentElement.querySelector("input")
-      if (inputToFocus) inputToFocus.focus()
-    }
-    return
-  }
-
-  console.log("[v0] Attempting registration with data:", {
-    username: name.value.trim(),
-    email: email.value.trim(),
-    phone: phone.value.trim(),
-  })
-
-  // Call backend API for registration
-  try {
-    console.log("[v0] Making registration request to backend")
-    console.log("[v0] Request URL: http://localhost:5000/api/auth/register")
-    console.log("[v0] Request method: POST")
-    console.log("[v0] Request headers: Content-Type: application/json")
-
-    const response = await fetch("http://localhost:5000/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: name.value.trim(),
-        email: email.value.trim(),
-        phone: phone.value.trim(),
-        password: password.value,
-      }),
-    })
-
-    console.log("[v0] Registration response status:", response.status)
-    console.log("[v0] Registration response headers:", response.headers)
-
-    if (!response.ok) {
-      let errorMessage = "Registration failed"
-      try {
-        const data = await response.json()
-        console.log("[v0] Error response data:", data)
-        errorMessage = data.error || errorMessage
-      } catch (jsonError) {
-        console.error("[v0] Failed to parse error response:", jsonError)
-        console.error("[v0] Raw response text:", await response.text().catch(() => "Could not read response"))
-
-        // Provide more specific error messages based on status codes
-        if (response.status === 0) {
-          errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
-        } else if (response.status === 500) {
-          errorMessage = "Server error. Please check the database connection and try again."
-        } else if (response.status === 409 || response.status === 400) {
-          errorMessage = "Email already exists or invalid data. Please check your information."
-        } else if (response.status === 404) {
-          errorMessage = "Registration endpoint not found. Please check the backend server."
-        } else if (response.status === 401) {
-          errorMessage = "Unauthorized. Please check your credentials."
-        } else {
-          errorMessage = `Server returned error ${response.status}. Please try again later.`
-        }
-      }
-
-      errors[1].textContent = errorMessage
-      errors[1].style.visibility = "visible"
-      return
-    }
-
-    const data = await response.json()
-    console.log("[v0] Registration successful:", data)
-
-    // Show success message before redirect
-    alert("Registration successful! You can now login with your credentials.")
-
-    // Redirect to login page
-    window.location.href = "Login.html"
-  } catch (error) {
-    console.error("[v0] Registration network error:", error)
-    console.error("[v0] Error name:", error.name)
-    console.error("[v0] Error message:", error.message)
-    console.error("[v0] Error stack:", error.stack)
-
-    let errorMessage = "Network error. Please try again."
-
-    if (error.name === "TypeError" && error.message.includes("fetch")) {
-      errorMessage =
-        "Cannot connect to server. Please ensure:\n1. Backend server is running on port 5000\n2. No firewall is blocking the connection\n3. The server URL is correct"
-    } else if (error.message.includes("CORS")) {
-      errorMessage = "Server configuration error. Please check CORS settings."
-    } else if (error.message.includes("NetworkError")) {
-      errorMessage = "Network connection failed. Please check your internet connection."
-    } else if (error.name === "AbortError") {
-      errorMessage = "Request timed out. Please try again."
-    } else if (error.message.includes("Failed to fetch")) {
-      errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
-    }
-
-    errors[1].textContent = errorMessage
-    errors[1].style.visibility = "visible"
   }
 }
 
@@ -1289,3 +1185,167 @@ document.addEventListener("DOMContentLoaded", () => {
     signupForm.addEventListener("submit", handleRegistration)
   }
 })
+
+async function handleRegistration(event) {
+  event.preventDefault()
+  console.log("[v0] Signup form submitted")
+
+  const signupForm = document.querySelector(".signup-container form")
+  const name = document.getElementById("signupName")
+  const email = document.getElementById("signupEmail")
+  const phone = document.getElementById("signupPhone")
+  const password = document.getElementById("signupPassword")
+  const confirm = document.getElementById("signupConfirmPassword")
+  const togglePassword = document.getElementById("toggleSignupPassword")
+  const toggleConfirm = document.getElementById("toggleSignupConfirmPassword")
+  const fields = [name, email, phone, password, confirm]
+  const errors = fields.map((f) => f?.parentElement.querySelector("small.error"))
+
+  // Clear previous errors
+  errors.forEach((s) => {
+    if (s) {
+      s.textContent = ""
+      s.style.visibility = "hidden"
+    }
+  })
+
+  let valid = true
+
+  if (!name.value.trim()) {
+    errors[0].textContent = "Full name is required."
+    errors[0].style.visibility = "visible"
+    name.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!email.value.trim()) {
+    errors[1].textContent = "Email address is required."
+    errors[1].style.visibility = "visible"
+    email.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!phone.value.trim()) {
+    errors[2].textContent = "Phone number is required."
+    errors[2].style.visibility = "visible"
+    phone.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!password.value) {
+    errors[3].textContent = "Password is required."
+    errors[3].style.visibility = "visible"
+    password.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!confirm.value) {
+    errors[4].textContent = "Please confirm your password."
+    errors[4].style.visibility = "visible"
+    confirm.setAttribute("aria-invalid", "true")
+    valid = false
+  } else if (password.value && confirm.value && password.value !== confirm.value) {
+    errors[4].textContent = "Passwords do not match."
+    errors[4].style.visibility = "visible"
+    confirm.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+
+  if (!valid) {
+    const firstVisibleErr = errors.find((s) => s && s.textContent.trim())
+    if (firstVisibleErr) {
+      const inputToFocus = firstVisibleErr.parentElement.querySelector("input")
+      if (inputToFocus) inputToFocus.focus()
+    }
+    return
+  }
+
+  console.log("[v0] Attempting registration with data:", {
+    username: name.value.trim(),
+    email: email.value.trim(),
+    phone: phone.value.trim(),
+  })
+
+  // Call backend API for registration
+  try {
+    console.log("[v0] Making registration request to backend")
+    console.log("[v0] Request URL: http://localhost:5000/api/auth/register")
+    console.log("[v0] Request method: POST")
+    console.log("[v0] Request headers: Content-Type: application/json")
+
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: name.value.trim(),
+        email: email.value.trim(),
+        phone: phone.value.trim(),
+        password: password.value,
+      }),
+    })
+
+    console.log("[v0] Registration response status:", response.status)
+    console.log("[v0] Registration response headers:", response.headers)
+
+    if (!response.ok) {
+      let errorMessage = "Registration failed"
+      try {
+        const data = await response.json()
+        console.log("[v0] Error response data:", data)
+        errorMessage = data.error || errorMessage
+      } catch (jsonError) {
+        console.error("[v0] Failed to parse error response:", jsonError)
+        console.error("[v0] Raw response text:", await response.text().catch(() => "Could not read response"))
+
+        // Provide more specific error messages based on status codes
+        if (response.status === 0) {
+          errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
+        } else if (response.status === 500) {
+          errorMessage = "Server error. Please check the database connection and try again."
+        } else if (response.status === 409 || response.status === 400) {
+          errorMessage = "Email already exists or invalid data. Please check your information."
+        } else if (response.status === 404) {
+          errorMessage = "Registration endpoint not found. Please check the backend server."
+        } else if (response.status === 401) {
+          errorMessage = "Unauthorized. Please check your credentials."
+        } else {
+          errorMessage = `Server returned error ${response.status}. Please try again later.`
+        }
+      }
+
+      errors[1].textContent = errorMessage
+      errors[1].style.visibility = "visible"
+      return
+    }
+
+    const data = await response.json()
+    console.log("[v0] Registration successful:", data)
+
+    // Show success message before redirect
+    alert("Registration successful! You can now login with your credentials.")
+
+    // Redirect to login page
+    window.location.href = "Login.html"
+  } catch (error) {
+    console.error("[v0] Registration network error:", error)
+    console.error("[v0] Error name:", error.name)
+    console.error("[v0] Error message:", error.message)
+    console.error("[v0] Error stack:", error.stack)
+
+    let errorMessage = "Network error. Please try again."
+
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      errorMessage =
+        "Cannot connect to server. Please ensure:\n1. Backend server is running on port 5000\n2. No firewall is blocking the connection\n3. The server URL is correct"
+    } else if (error.message.includes("CORS")) {
+      errorMessage = "Server configuration error. Please check CORS settings."
+    } else if (error.message.includes("NetworkError")) {
+      errorMessage = "Network connection failed. Please check your internet connection."
+    } else if (error.name === "AbortError") {
+      errorMessage = "Request timed out. Please try again."
+    } else if (error.message.includes("Failed to fetch")) {
+      errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
+    }
+
+    errors[1].textContent = errorMessage
+    errors[1].style.visibility = "visible"
+  }
+}

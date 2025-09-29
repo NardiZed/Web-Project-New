@@ -11,7 +11,7 @@
 <body class="Marketplace">
     <header>
         <nav>
-            <a href="#">Universal Market</a>
+            <a href="#" onclick="window.location.href='index.html'">Universal Market</a>
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="Marketplace.html">Marketplace</a></li>
@@ -28,38 +28,44 @@
     <!-- Wrapped aside and main-body in a flex container -->
     <div class="main-content">
         <section class="Aside">
+            <!-- Moved search section above categories -->
+            <div class="search-section">
+                <h3>Search Products</h3>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
+                    <!-- Made search button look like other filter buttons -->
+                    <button onclick="performSearch()" class="search-btn">Search</button>
+                </div>
+            </div>
+            
             <div class="Categories">
                 <h3>Categories</h3>
-                <!-- Updated span to show dynamic count and added proper onclick handlers -->
-                <span>0 selected <button onclick="selectAllFilters()">Select All</button> <button onclick="clearAllFilters()">Clear All</button></span>
+                <!-- Updated to show dynamic count and styled buttons -->
+                <div class="filter-controls">
+                    <span id="selectedCount">0 selected</span>
+                    <button onclick="selectAllFilters()" class="filter-btn">Select All</button> 
+                    <button onclick="clearAllFilters()" class="filter-btn">Clear All</button>
+                </div>
+                <!-- Added proper gap between checkboxes and text labels -->
                 <div class="check-list">
-                    <!-- Added proper IDs and labels for accessibility -->
-                    <input type="checkbox" id="electronics"><label for="electronics">Electronics</label><br>
-                    <input type="checkbox" id="clothing"><label for="clothing">Clothing</label><br>
-                    <input type="checkbox" id="real-estate"><label for="real-estate">Real Estate</label><br>
-                    <input type="checkbox" id="vehicles"><label for="vehicles">Vehicles</label><br>
-                    <input type="checkbox" id="home-goods"><label for="home-goods">Home Goods</label><br>
-                    <input type="checkbox" id="cosmetics"><label for="cosmetics">Cosmetics</label><br>
+                    <label for="electronics"><input type="checkbox" id="electronics">Electronics</label>
+                    <label for="clothing"><input type="checkbox" id="clothing">Clothing</label>
+                    <label for="real-estate"><input type="checkbox" id="real-estate">Real Estate</label>
+                    <label for="vehicles"><input type="checkbox" id="vehicles">Vehicles</label>
+                    <label for="home-goods"><input type="checkbox" id="home-goods">Home Goods</label>
+                    <label for="cosmetics"><input type="checkbox" id="cosmetics">Cosmetics</label>
                 </div>
             </div>
             <div>
                 <h3>Price Range</h3>
+                <!-- Added proper gap between checkboxes and text labels -->
                 <div class="check-list">
-                    <!-- Added proper IDs and labels for price ranges -->
-                    <input type="checkbox" id="price-500"><label for="price-500">>500ETB</label><br>
-                    <input type="checkbox" id="price-500-1500"><label for="price-500-1500">500-1500</label><br>
-                    <input type="checkbox" id="price-1500-2500"><label for="price-1500-2500">1500-2500</label><br>
-                    <input type="checkbox" id="price-2500-5000"><label for="price-2500-5000">2500-5000</label><br>
-                    <input type="checkbox" id="price-5000-10000"><label for="price-5000-10000">5000-10000</label><br>
-                    <input type="checkbox" id="price-10000"><label for="price-10000">>10000</label><br>
-                </div>
-            </div>
-            <!-- Added search functionality -->
-            <div class="search-section">
-                <h3>Search</h3>
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
-                    <button onclick="performSearch()" class="search-btn">Search</button>
+                    <label for="price-500"><input type="checkbox" id="price-500">>500ETB</label>
+                    <label for="price-500-1500"><input type="checkbox" id="price-500-1500">500-1500</label>
+                    <label for="price-1500-2500"><input type="checkbox" id="price-1500-2500">1500-2500</label>
+                    <label for="price-2500-5000"><input type="checkbox" id="price-2500-5000">2500-5000</label>
+                    <label for="price-5000-10000"><input type="checkbox" id="price-5000-10000">5000-10000</label>
+                    <label for="price-10000"><input type="checkbox" id="price-10000">>10000</label>
                 </div>
             </div>
         </section>
@@ -75,6 +81,60 @@
                 <!-- Products will be dynamically loaded here -->
                 <div class="loading-spinner">
                     <p>Loading products...</p>
+                </div>
+            </div>
+            
+            <!-- Created sample product containers with placeholder images -->
+            <!-- Made sample products display side by side in a grid -->
+            <div class="sample-products">
+                <div class="sample-product">
+                    <!-- Added image element instead of placeholder div -->
+                    <img src="/placeholder.svg?height=200&width=200" alt="Sample Product 1">
+                    <h3>Sample Product 1</h3>
+                    <p class="category">Electronics</p>
+                    <p class="price">$299.99</p>
+                    <p class="description">High-quality electronic device with advanced features</p>
+                    <button>Add to cart</button>
+                </div>
+                <div class="sample-product">
+                    <img src="/placeholder.svg?height=200&width=200" alt="Sample Product 2">
+                    <h3>Sample Product 2</h3>
+                    <p class="category">Clothing</p>
+                    <p class="price">$49.99</p>
+                    <p class="description">Comfortable and stylish clothing item</p>
+                    <button>Add to cart</button>
+                </div>
+                <div class="sample-product">
+                    <img src="/placeholder.svg?height=200&width=200" alt="Sample Product 3">
+                    <h3>Sample Product 3</h3>
+                    <p class="category">Home Goods</p>
+                    <p class="price">$79.99</p>
+                    <p class="description">Essential home item for everyday use</p>
+                    <button>Add to cart</button>
+                </div>
+                <div class="sample-product">
+                    <img src="/placeholder.svg?height=200&width=200" alt="Sample Product 4">
+                    <h3>Sample Product 4</h3>
+                    <p class="category">Vehicles</p>
+                    <p class="price">$15,999.99</p>
+                    <p class="description">Reliable vehicle in excellent condition</p>
+                    <button>Add to cart</button>
+                </div>
+                <div class="sample-product">
+                    <img src="/placeholder.svg?height=200&width=200" alt="Sample Product 5">
+                    <h3>Sample Product 5</h3>
+                    <p class="category">Cosmetics</p>
+                    <p class="price">$24.99</p>
+                    <p class="description">Premium beauty product for daily use</p>
+                    <button>Add to cart</button>
+                </div>
+                <div class="sample-product">
+                    <img src="/placeholder.svg?height=200&width=200" alt="Sample Product 6">
+                    <h3>Sample Product 6</h3>
+                    <p class="category">Real Estate</p>
+                    <p class="price">$250,000.00</p>
+                    <p class="description">Beautiful property in prime location</p>
+                    <button>Add to cart</button>
                 </div>
             </div>
         </section>
