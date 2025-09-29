@@ -5,7 +5,7 @@ const getProducts = async (req, res) => {
   try {
     const { categories, minPrice, maxPrice, search } = req.query
 
-    let query = "SELECT * FROM products WHERE 1=1"
+    let query = "SELECT * FROM products WHERE is_active = true"
     const queryParams = []
     let paramCount = 0
 
@@ -60,7 +60,7 @@ const getProductById = async (req, res) => {
   try {
     const { id } = req.params
 
-    const result = await pool.query("SELECT * FROM products WHERE id = $1", [id])
+    const result = await pool.query("SELECT * FROM products WHERE id = $1 AND is_active = true", [id])
 
     if (result.rows.length === 0) {
       return res.status(404).json({
@@ -86,7 +86,7 @@ const getProductById = async (req, res) => {
 // Get all unique categories
 const getCategories = async (req, res) => {
   try {
-    const result = await pool.query("SELECT DISTINCT category FROM products ORDER BY category")
+    const result = await pool.query("SELECT DISTINCT category FROM products WHERE is_active = true ORDER BY category")
 
     res.json({
       success: true,
@@ -102,8 +102,42 @@ const getCategories = async (req, res) => {
   }
 }
 
+const addProduct = async (req, res) => {
+  try {
+    const { name, description, price, category, image_url, stock_quantity } = req.body
+    const seller_id = req.user ? req.user.userId : 1 // Default to user 1 if no auth
+
+    // Validate required fields
+    if (!name || !price || !category) {
+      return res.status(400).json({
+        success: false,
+        error: "Name, price, and category are required",
+      })
+    }
+
+    const result = await pool.query(
+      "INSERT INTO products (seller_id, name, description, price, category, image_url, stock_quantity) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [seller_id, name, description, Number.parseFloat(price), category, image_url, stock_quantity || 1],
+    )
+
+    res.status(201).json({
+      success: true,
+      product: result.rows[0],
+      message: "Product added successfully",
+    })
+  } catch (error) {
+    console.error("[PRODUCTS] Error adding product:", error)
+    res.status(500).json({
+      success: false,
+      error: "Failed to add product",
+      message: error.message,
+    })
+  }
+}
+
 module.exports = {
   getProducts,
   getProductById,
   getCategories,
+  addProduct,
 }

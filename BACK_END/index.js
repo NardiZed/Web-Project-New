@@ -3,7 +3,7 @@ const cors = require("cors")
 require("dotenv").config()
 
 const { registerUser, loginUser, authenticateToken } = require("./src/auth")
-const { getProducts, getProductById, getCategories } = require("./src/products")
+const { getProducts, getProductById, getCategories, addProduct } = require("./src/products")
 
 const app = express()
 
@@ -39,6 +39,10 @@ app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`)
   console.log("Origin:", req.headers.origin)
   console.log("User-Agent:", req.headers["user-agent"])
+  console.log("Content-Type:", req.headers["content-type"])
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log("Request body keys:", Object.keys(req.body))
+  }
   next()
 })
 
@@ -67,6 +71,7 @@ app.post("/api/auth/login", loginUser)
 app.get("/api/products", getProducts)
 app.get("/api/products/:id", getProductById)
 app.get("/api/categories", getCategories)
+app.post("/api/products", authenticateToken, addProduct)
 
 // Protected route example
 app.get("/api/auth/profile", authenticateToken, (req, res) => {
@@ -82,10 +87,19 @@ app.get("/api/protected", authenticateToken, (req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  console.error("Server error:", err)
+  console.error("Server error details:")
+  console.error("- Error name:", err.name)
+  console.error("- Error message:", err.message)
+  console.error("- Error stack:", err.stack)
+  console.error("- Request path:", req.path)
+  console.error("- Request method:", req.method)
+  console.error("- Request headers:", req.headers)
+
   res.status(500).json({
     error: "Internal server error",
     message: process.env.NODE_ENV === "development" ? err.message : "Something went wrong",
+    timestamp: new Date().toISOString(),
+    path: req.path,
   })
 })
 

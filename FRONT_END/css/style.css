@@ -19,7 +19,7 @@
 }
 
 body {
-  padding-top: 80px; /* To prevent content being hidden under fixed nav */
+  /* Removed fixed padding-top to allow responsive navbar */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: var(--text-dark);
@@ -27,21 +27,20 @@ body {
 /*==========================*/
 
 /* Navigation Styles for Horizontal Layout */
+/* Updated navigation to be sticky instead of fixed and made it responsive */
 nav {
   padding: 1rem 2rem;
   box-shadow: var(--shadow);
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
   background-color: var(--nav-color);
-}
-
-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 nav a[href="#"] {
@@ -58,6 +57,7 @@ nav ul {
   margin: 0;
   padding: 0;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 nav ul li a {
@@ -77,6 +77,46 @@ nav ul li a:hover {
   color: var(--primary-color);
   transition: all 0.5s ease;
 }
+
+/* Added responsive navigation styles */
+@media (max-width: 768px) {
+  nav {
+    padding: 0.8rem 1rem;
+  }
+
+  nav a[href="#"] {
+    font-size: 1.8rem;
+  }
+
+  nav ul {
+    gap: 1rem;
+  }
+
+  nav ul li a {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  nav ul {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  nav ul li a {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/*==========================*/
 
 /* Added cart counter styles */
 .cart-counter {
@@ -107,6 +147,8 @@ nav ul li a:hover {
     transform: scale(1);
   }
 }
+
+/*==========================*/
 
 /* Updated profile dropdown styles for initials and smaller signout */
 .profile-dropdown {
@@ -153,14 +195,6 @@ nav ul li a:hover {
 .profile-btn:hover .profile-avatar {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(86, 71, 135, 0.3);
-}
-
-nav ul li a:hover {
-  background-color: transparent;
-  text-decoration: underline;
-  text-underline-offset: 5px;
-  color: var(--primary-color);
-  transition: all 0.5s ease;
 }
 
 /*==========================*/
@@ -251,8 +285,11 @@ nav ul li a:hover {
 }
 
 .cards img {
-  width: 60px;
-  height: 60px;
+  /* Fixed image sizing to be responsive and consistent */
+  width: 80px;
+  height: 80px;
+  max-width: 100%;
+  object-fit: contain;
   margin-bottom: 1rem;
   background-color: var(--secondary-color);
   border-radius: 50%;
@@ -285,11 +322,190 @@ nav ul li a:hover {
   box-shadow: var(--shadow);
   border-radius: var(--border-radius);
   height: fit-content;
+  overflow-x: auto; /* Prevent horizontal overflow */
 }
 
-.Marketplace .main-body {
+/* Improved search section with better responsive behavior */
+.Marketplace .search-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+.Marketplace .search-section h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.Marketplace .search-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.Marketplace .search-input {
   flex: 1;
-  min-height: 500px;
+  min-width: 150px;
+  padding: 0.5rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+.Marketplace .search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(86, 71, 135, 0.3);
+}
+
+.Marketplace .search-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.Marketplace .search-btn:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-1px);
+}
+
+/* Enhanced categories section with responsive heading */
+.Marketplace .Categories h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Added gap between checkboxes and labels */
+.Marketplace .check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.Marketplace .check-list input[type="checkbox"] {
+  margin-right: 0.8rem;
+}
+
+.Marketplace .check-list label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.2rem 0;
+}
+
+/* Made filter buttons look like search buttons */
+.Marketplace .Categories span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+.Marketplace .filter-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.Marketplace .filter-btn:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-1px);
+}
+
+.Marketplace .filter-btn:active {
+  transform: translateY(0);
+}
+
+/* Price range section with responsive heading */
+.Marketplace .Aside > div:last-child h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.Marketplace .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 20px;
+}
+
+.Marketplace .product-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(86, 71, 135, 0.1);
+}
+
+.Marketplace .product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(86, 71, 135, 0.15);
+}
+
+.Marketplace .product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+}
+
+.Marketplace .product-card h3 {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.Marketplace .product-card .category {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+
+.Marketplace .product-card .price {
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.Marketplace .product-card .description {
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  opacity: 0.8;
 }
 
 .Marketplace .cards button {
@@ -301,42 +517,50 @@ nav ul li a:hover {
   padding: 0.5rem 1rem;
   border-radius: var(--border-radius);
   transition: all 0.3s ease;
+  width: 100%;
 }
+
 .Marketplace .cards button:hover {
   background-color: var(--accent-color);
   border-color: var(--primary-color);
   color: var(--primary-color);
 }
 
-.Marketplace .Aside button {
-  border: none;
-}
-.Marketplace input[type="checkbox"] {
-  margin-right: 10px;
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-.Marketplace .cards img {
-  width: 100%;
-  height: 180px; /* Set a fixed height for consistency */
-  object-fit: cover; /* Ensures the image covers the box without distortion */
-  margin-bottom: 1rem;
-  background-color: var(--secondary-color);
-  border-radius: var(--border-radius);
-  padding: 0; /* Remove padding so image fills the card */
-  display: block;
+/* Added sample product containers styling */
+.Marketplace .sample-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 20px;
 }
 
-.Cart .product-container img {
-  width: 100%;
-  height: 180px; /* Set a fixed height for consistency */
-  object-fit: cover; /* Ensures the image covers the box without distortion */
-  margin-bottom: 1rem;
-  background-color: var(--secondary-color);
+.Marketplace .sample-product {
+  background: white;
   border-radius: var(--border-radius);
-  padding: 0; /* Remove padding so image fills the card */
-  display: block;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(86, 71, 135, 0.1);
+  text-align: center;
+}
+
+.Marketplace .sample-product:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(86, 71, 135, 0.15);
+}
+
+.Marketplace .sample-product .product-image-placeholder {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  border: 2px dashed var(--secondary-color);
 }
 
 /*==========================*/
@@ -347,9 +571,10 @@ nav ul li a:hover {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 85vh;
-  width: auto;
+  min-height: calc(100vh - 160px);
+  width: 100%;
   margin-bottom: 5%;
+  padding: 20px;
 }
 
 .Login .login-container > div {
@@ -357,8 +582,9 @@ nav ul li a:hover {
   box-shadow: var(--secondary-color) 0px 0px 10px 0px;
   border-radius: var(--border-radius);
   background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-  width: 500px;
-  height: 65vh;
+  width: 100%;
+  max-width: 500px;
+  min-height: 400px;
   text-align: center;
 }
 
@@ -366,27 +592,51 @@ nav ul li a:hover {
   margin-bottom: 20px;
   color: var(--accent-color);
   font-weight: 700;
+  font-size: 1.8rem;
+  word-wrap: break-word;
 }
+
 .Login .login-form p {
   margin-bottom: 20px;
   color: var(--nav-color);
   font-weight: 300;
+  word-wrap: break-word;
 }
 
+/* Made password field same size as name field */
 .Login .login-form input[type="text"],
 .Login .login-form input[type="password"] {
-  width: 80%;
-  padding: 5px;
+  width: 100%;
+  max-width: 80%;
+  padding: 10px;
   margin: 10px 0;
   border: 1px solid var(--secondary-color);
   border-radius: var(--border-radius);
   font-size: 1rem;
+  box-sizing: border-box;
+  height: 45px; /* Consistent height for both fields */
 }
+
 .Login .login-form input[type="text"]:focus,
 .Login .login-form input[type="password"]:focus {
   outline: none;
   border-color: var(--accent-color);
   box-shadow: 0 0 5px var(--bg-light);
+}
+
+.Login .login-form .password-field {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 80%;
+  margin-top: 0.6rem;
+}
+
+.Login .login-form .password-field input {
+  width: 100%;
+  padding: 10px;
+  padding-right: 2.5rem;
+  height: 45px; /* Same height as name field */
 }
 
 .Login .login-form button {
@@ -396,11 +646,11 @@ nav ul li a:hover {
   border: 1px solid transparent;
   color: var(--primary-color);
   font-weight: bold;
-  padding: 8px;
-  width: 80px;
+  padding: 12px 24px;
   border-radius: var(--border-radius);
   transition: all 0.5s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .Login .login-form button:hover {
@@ -481,10 +731,9 @@ nav ul li a:hover {
 
 .Sign-Up .signup-container .form button:hover {
   background-color: var(--primary-color);
-  border-color: var(--accent-color);
-  box-shadow: 0 6px 20px #d2c1b6;
-  transform: scale(1.05);
   color: var(--accent-color);
+  border: 2px solid var(--primary-color);
+  transform: scale(1.05);
 }
 
 /*==========================*/
@@ -576,6 +825,7 @@ nav ul li a:hover {
   margin-bottom: 0.5rem;
 }
 
+/* Enhanced drag-drop area to be clickable and functional */
 .Sell .drag-drop-area {
   border: 2px dashed var(--secondary-color);
   border-radius: var(--border-radius);
@@ -590,6 +840,7 @@ nav ul li a:hover {
 .Sell .drag-drop-area:hover,
 .Sell .drag-drop-area:focus {
   border-color: var(--accent-color);
+  background-color: #e8f0f2;
 }
 
 .Sell .drag-drop-content svg {
@@ -620,6 +871,8 @@ nav ul li a:hover {
   font-size: 0.9rem;
   margin-top: 0.2rem;
 }
+
+/* Made list item button functional */
 .Sell form button[type="submit"] {
   display: block;
   margin: 1.2rem auto 0 auto; /* Center horizontally */
@@ -632,6 +885,7 @@ nav ul li a:hover {
   font-size: 1.1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: background 0.3s, color 0.3s, transform 0.2s;
+  cursor: pointer;
 }
 
 .Sell form button[type="submit"]:hover {
@@ -640,6 +894,7 @@ nav ul li a:hover {
   color: var(--primary-color);
   transform: scale(1.05);
 }
+
 /* Inline checkbox and label for terms agreement */
 .Sell form .terms-row {
   display: flex;
@@ -703,6 +958,7 @@ nav ul li a:hover {
   height: 100px;
   object-fit: cover;
   border-radius: var(--border-radius);
+  margin-bottom: 1rem;
 }
 
 .item-details h3 {
@@ -919,6 +1175,7 @@ nav ul li a:hover {
   font-size: 1rem;
 }
 
+/* Made proceed to checkout button functional */
 .Cart button {
   display: block;
   margin: 2rem auto 0 auto;
@@ -931,6 +1188,7 @@ nav ul li a:hover {
   font-size: 1.15rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: background 0.3s, color 0.3s, transform 0.2s;
+  cursor: pointer;
 }
 
 .Cart button:hover {
@@ -1076,47 +1334,111 @@ footer::before {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .Marketplace .main-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .Marketplace .Aside {
+    width: 100%;
+    order: 2;
+  }
+
+  .Marketplace .main-body {
+    order: 1;
+  }
+}
+
 @media (max-width: 768px) {
-  .link-container {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    text-align: center;
+  /* Marketplace responsive fixes */
+  .Marketplace .search-container {
+    flex-direction: column;
   }
 
-  .link-container div:nth-child(2) a {
-    border-left: none;
-    border-bottom: 2px solid transparent;
-    padding-left: 0;
-    padding-bottom: 0.5rem;
+  .Marketplace .search-input {
+    min-width: 100%;
   }
 
-  .link-container div:nth-child(2) a:hover {
-    border-left-color: transparent;
-    border-bottom-color: var(--accent-color);
-    transform: translateY(-2px);
+  .Marketplace .Categories span {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
   }
 
-  .link-container div:nth-child(3) p {
-    justify-content: center;
+  .Marketplace .filter-btn {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
   }
 
-  footer {
-    padding: 2rem 0 1rem;
+  .Marketplace .cards {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 15px;
+  }
+
+  /* Login responsive fixes */
+  .Login .login-container {
+    padding: 15px;
+    min-height: calc(100vh - 140px);
+  }
+
+  .Login .login-container > div {
+    padding: 15px;
+    min-height: 350px;
+  }
+
+  .Login .login-form h1 {
+    font-size: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .link-container {
-    padding: 0 1rem;
+  /* Small screen marketplace fixes */
+  .Marketplace .Aside {
+    padding: 15px;
   }
 
-  .link-container div:first-child h3 {
-    font-size: 1.5rem;
+  .Marketplace .search-section h3,
+  .Marketplace .Categories h3,
+  .Marketplace .Aside > div:last-child h3 {
+    font-size: 1rem;
   }
 
-  .link-container div:nth-child(2) h3,
-  .link-container div:nth-child(3) h3 {
-    font-size: 1.1rem;
+  .Marketplace .cards {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+
+  /* Small screen login fixes */
+  .Login .login-container {
+    padding: 10px;
+  }
+
+  .Login .login-container > div {
+    padding: 15px;
+    min-height: 320px;
+  }
+
+  .Login .login-form h1 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+  }
+
+  .Login .login-form p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+
+  .Login .login-form input[type="text"],
+  .Login .login-form input[type="password"] {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .Login .login-form button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
   }
 }
 

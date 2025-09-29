@@ -31,6 +31,30 @@ function updateCartCounter() {
   })
 }
 
+function handleCheckout() {
+  console.log("[v0] Checkout button clicked")
+
+  // Check if user is logged in
+  const authToken = localStorage.getItem("authToken")
+  const userData = localStorage.getItem("user")
+
+  if (!authToken || !userData) {
+    // User is not logged in, show login/signup prompt
+    const userChoice = confirm(
+      "You need to be logged in to proceed to checkout. Click OK to go to Login page, or Cancel to go to Sign-up page.",
+    )
+    if (userChoice) {
+      window.location.href = "Login.html"
+    } else {
+      window.location.href = "Signup.html"
+    }
+    return
+  }
+
+  // User is logged in, proceed with checkout
+  alert("Proceeding to checkout... (This feature will be implemented soon)")
+}
+
 // Add product to cart (updated implementation with auth check)
 function addToCart(productId) {
   console.log("[v0] Adding product to cart:", productId)
@@ -184,10 +208,7 @@ function displayCartItems() {
 
   if (checkoutButton) {
     checkoutButton.style.display = "block"
-    checkoutButton.onclick = () => {
-      console.log(`[v0] Proceeding to checkout with total: $${cartTotal.toFixed(2)}`)
-      // Here you would typically redirect to a checkout page or process payment
-    }
+    checkoutButton.onclick = handleCheckout
   }
 }
 
@@ -204,6 +225,69 @@ function initializeCart() {
   }
 }
 
+function initializeSellPage() {
+  const dragDropArea = document.getElementById("drag-drop-area")
+  const fileInput = document.getElementById("item-image")
+  const browseLink = document.querySelector(".browse-link")
+
+  if (dragDropArea && fileInput) {
+    // Make drag-drop area clickable to open file browser
+    dragDropArea.addEventListener("click", (e) => {
+      e.preventDefault()
+      fileInput.click()
+    })
+
+    // Handle file selection
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files.length > 0) {
+        const fileName = e.target.files[0].name
+        const dragDropText = dragDropArea.querySelector(".drag-drop-text")
+        if (dragDropText) {
+          dragDropText.textContent = `Selected: ${fileName}`
+        }
+      }
+    })
+
+    // Handle drag and drop events
+    dragDropArea.addEventListener("dragover", (e) => {
+      e.preventDefault()
+      dragDropArea.style.borderColor = "var(--accent-color)"
+      dragDropArea.style.backgroundColor = "#e8f0f2"
+    })
+
+    dragDropArea.addEventListener("dragleave", (e) => {
+      e.preventDefault()
+      dragDropArea.style.borderColor = "var(--secondary-color)"
+      dragDropArea.style.backgroundColor = "#cfd7df"
+    })
+
+    dragDropArea.addEventListener("drop", (e) => {
+      e.preventDefault()
+      dragDropArea.style.borderColor = "var(--secondary-color)"
+      dragDropArea.style.backgroundColor = "#cfd7df"
+
+      const files = e.dataTransfer.files
+      if (files.length > 0) {
+        fileInput.files = files
+        const fileName = files[0].name
+        const dragDropText = dragDropArea.querySelector(".drag-drop-text")
+        if (dragDropText) {
+          dragDropText.textContent = `Selected: ${fileName}`
+        }
+      }
+    })
+  }
+
+  if (browseLink) {
+    browseLink.addEventListener("click", (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      fileInput.click()
+    })
+  }
+}
+
+// Update navbar for auth state
 function updateNavbarForAuthState() {
   const authToken = localStorage.getItem("authToken")
   const userData = localStorage.getItem("user")
@@ -610,6 +694,246 @@ function debounce(func, wait) {
   }
 }
 
+async function handleSellForm(event) {
+  event.preventDefault()
+  console.log("[v0] Sell form submitted")
+
+  // Check if user is logged in
+  const authToken = localStorage.getItem("authToken")
+  if (!authToken) {
+    alert("You need to be logged in to sell items. Please login first.")
+    window.location.href = "Login.html"
+    return
+  }
+
+  const form = event.target
+  const submitBtn = document.getElementById("submitBtn")
+  const errors = form.querySelectorAll("small.error")
+
+  // Clear previous errors
+  errors.forEach((error) => {
+    error.textContent = ""
+    error.style.visibility = "hidden"
+  })
+
+  const formData = {
+    name: document.getElementById("itemName").value.trim(),
+    price: document.getElementById("itemPrice").value,
+    description: document.getElementById("itemDescription").value.trim(),
+    category: document.getElementById("itemCategory").value,
+    stock_quantity: document.getElementById("stockQuantity").value || 1,
+    image_url: "/placeholder.svg?height=300&width=300", // Default placeholder
+  }
+
+  // Basic validation
+  let isValid = true
+  if (!formData.name) {
+    document.getElementById("itemName").nextElementSibling.textContent = "Item name is required"
+    document.getElementById("itemName").nextElementSibling.style.visibility = "visible"
+    isValid = false
+  }
+  if (!formData.price || formData.price <= 0) {
+    document.getElementById("itemPrice").nextElementSibling.textContent = "Valid price is required"
+    document.getElementById("itemPrice").nextElementSibling.style.visibility = "visible"
+    isValid = false
+  }
+  if (!formData.category) {
+    document.getElementById("itemCategory").nextElementSibling.textContent = "Category is required"
+    document.getElementById("itemCategory").nextElementSibling.style.visibility = "visible"
+    isValid = false
+  }
+  if (!document.getElementById("terms").checked) {
+    document.getElementById("terms").parentElement.nextElementSibling.textContent = "You must agree to the terms"
+    document.getElementById("terms").parentElement.nextElementSibling.style.visibility = "visible"
+    isValid = false
+  }
+
+  if (!isValid) return
+
+  // Disable submit button
+  submitBtn.disabled = true
+  submitBtn.textContent = "Listing Item..."
+
+  try {
+    // Simulate API call (replace with actual backend call when available)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    console.log("[v0] Item listed successfully:", formData)
+    alert("Item listed successfully! Redirecting to marketplace...")
+    window.location.href = "Marketplace.html"
+  } catch (error) {
+    console.error("[v0] Error listing item:", error)
+    alert("Failed to list item: " + error.message)
+  } finally {
+    submitBtn.disabled = false
+    submitBtn.textContent = "List Item"
+  }
+}
+
+async function handleRegistration(event) {
+  event.preventDefault()
+  console.log("[v0] Signup form submitted")
+
+  const signupForm = document.querySelector(".signup-container form")
+  const name = document.getElementById("signupName")
+  const email = document.getElementById("signupEmail")
+  const phone = document.getElementById("signupPhone")
+  const password = document.getElementById("signupPassword")
+  const confirm = document.getElementById("signupConfirmPassword")
+  const togglePassword = document.getElementById("toggleSignupPassword")
+  const toggleConfirm = document.getElementById("toggleSignupConfirmPassword")
+  const fields = [name, email, phone, password, confirm]
+  const errors = fields.map((f) => f?.parentElement.querySelector("small.error"))
+
+  // Clear previous errors
+  errors.forEach((s) => {
+    if (s) {
+      s.textContent = ""
+      s.style.visibility = "hidden"
+    }
+  })
+
+  let valid = true
+
+  if (!name.value.trim()) {
+    errors[0].textContent = "Full name is required."
+    errors[0].style.visibility = "visible"
+    name.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!email.value.trim()) {
+    errors[1].textContent = "Email address is required."
+    errors[1].style.visibility = "visible"
+    email.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!phone.value.trim()) {
+    errors[2].textContent = "Phone number is required."
+    errors[2].style.visibility = "visible"
+    phone.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!password.value) {
+    errors[3].textContent = "Password is required."
+    errors[3].style.visibility = "visible"
+    password.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+  if (!confirm.value) {
+    errors[4].textContent = "Please confirm your password."
+    errors[4].style.visibility = "visible"
+    confirm.setAttribute("aria-invalid", "true")
+    valid = false
+  } else if (password.value && confirm.value && password.value !== confirm.value) {
+    errors[4].textContent = "Passwords do not match."
+    errors[4].style.visibility = "visible"
+    confirm.setAttribute("aria-invalid", "true")
+    valid = false
+  }
+
+  if (!valid) {
+    const firstVisibleErr = errors.find((s) => s && s.textContent.trim())
+    if (firstVisibleErr) {
+      const inputToFocus = firstVisibleErr.parentElement.querySelector("input")
+      if (inputToFocus) inputToFocus.focus()
+    }
+    return
+  }
+
+  console.log("[v0] Attempting registration with data:", {
+    username: name.value.trim(),
+    email: email.value.trim(),
+    phone: phone.value.trim(),
+  })
+
+  // Call backend API for registration
+  try {
+    console.log("[v0] Making registration request to backend")
+    console.log("[v0] Request URL: http://localhost:5000/api/auth/register")
+    console.log("[v0] Request method: POST")
+    console.log("[v0] Request headers: Content-Type: application/json")
+
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: name.value.trim(),
+        email: email.value.trim(),
+        phone: phone.value.trim(),
+        password: password.value,
+      }),
+    })
+
+    console.log("[v0] Registration response status:", response.status)
+    console.log("[v0] Registration response headers:", response.headers)
+
+    if (!response.ok) {
+      let errorMessage = "Registration failed"
+      try {
+        const data = await response.json()
+        console.log("[v0] Error response data:", data)
+        errorMessage = data.error || errorMessage
+      } catch (jsonError) {
+        console.error("[v0] Failed to parse error response:", jsonError)
+        console.error("[v0] Raw response text:", await response.text().catch(() => "Could not read response"))
+
+        // Provide more specific error messages based on status codes
+        if (response.status === 0) {
+          errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
+        } else if (response.status === 500) {
+          errorMessage = "Server error. Please check the database connection and try again."
+        } else if (response.status === 409 || response.status === 400) {
+          errorMessage = "Email already exists or invalid data. Please check your information."
+        } else if (response.status === 404) {
+          errorMessage = "Registration endpoint not found. Please check the backend server."
+        } else if (response.status === 401) {
+          errorMessage = "Unauthorized. Please check your credentials."
+        } else {
+          errorMessage = `Server returned error ${response.status}. Please try again later.`
+        }
+      }
+
+      errors[1].textContent = errorMessage
+      errors[1].style.visibility = "visible"
+      return
+    }
+
+    const data = await response.json()
+    console.log("[v0] Registration successful:", data)
+
+    // Show success message before redirect
+    alert("Registration successful! You can now login with your credentials.")
+
+    // Redirect to login page
+    window.location.href = "Login.html"
+  } catch (error) {
+    console.error("[v0] Registration network error:", error)
+    console.error("[v0] Error name:", error.name)
+    console.error("[v0] Error message:", error.message)
+    console.error("[v0] Error stack:", error.stack)
+
+    let errorMessage = "Network error. Please try again."
+
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      errorMessage =
+        "Cannot connect to server. Please ensure:\n1. Backend server is running on port 5000\n2. No firewall is blocking the connection\n3. The server URL is correct"
+    } else if (error.message.includes("CORS")) {
+      errorMessage = "Server configuration error. Please check CORS settings."
+    } else if (error.message.includes("NetworkError")) {
+      errorMessage = "Network connection failed. Please check your internet connection."
+    } else if (error.name === "AbortError") {
+      errorMessage = "Request timed out. Please try again."
+    } else if (error.message.includes("Failed to fetch")) {
+      errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
+    }
+
+    errors[1].textContent = errorMessage
+    errors[1].style.visibility = "visible"
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("[v0] DOM loaded, initializing authentication")
 
@@ -659,6 +983,16 @@ document.addEventListener("DOMContentLoaded", () => {
           applyFilters()
         }
       })
+    }
+  }
+
+  if (document.body.classList.contains("Sell")) {
+    console.log("[v0] Sell page detected, initializing...")
+    initializeSellPage()
+
+    const sellForm = document.getElementById("sellForm")
+    if (sellForm) {
+      sellForm.addEventListener("submit", handleSellForm)
     }
   }
 
@@ -750,9 +1084,24 @@ document.addEventListener("DOMContentLoaded", () => {
         return
       }
 
-      // Call backend API for login
       try {
         console.log("[v0] Attempting login request to backend")
+        console.log("[v0] Request URL: http://localhost:5000/api/auth/login")
+        console.log("[v0] Request method: POST")
+        console.log("[v0] Request headers: Content-Type: application/json")
+        console.log("[v0] Request body:", {
+          email: username.value.trim(),
+          password: "[REDACTED]",
+        })
+
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]')
+        const originalText = submitButton ? submitButton.textContent : ""
+        if (submitButton) {
+          submitButton.disabled = true
+          submitButton.textContent = "Signing in..."
+        }
+
         const response = await fetch("http://localhost:5000/api/auth/login", {
           method: "POST",
           headers: {
@@ -765,20 +1114,36 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         console.log("[v0] Login response status:", response.status)
+        console.log("[v0] Login response ok:", response.ok)
+        console.log("[v0] Login response headers:", Object.fromEntries(response.headers.entries()))
+
+        // Reset button state
+        if (submitButton) {
+          submitButton.disabled = false
+          submitButton.textContent = originalText
+        }
 
         if (!response.ok) {
           let errorMessage = "Login failed"
           try {
             const data = await response.json()
-            errorMessage = data.error || errorMessage
+            console.log("[v0] Error response data:", data)
+            errorMessage = data.error || data.message || errorMessage
           } catch (jsonError) {
             console.error("[v0] Failed to parse login error response:", jsonError)
+            console.error("[v0] Raw response text:", await response.text().catch(() => "Could not read response"))
+
+            // Provide more specific error messages based on status codes
             if (response.status === 0) {
-              errorMessage = "Cannot connect to server. Please check if the backend is running."
+              errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
             } else if (response.status === 401) {
               errorMessage = "Invalid username or password."
+            } else if (response.status === 404) {
+              errorMessage = "Login endpoint not found. Please check the backend server."
             } else if (response.status >= 500) {
-              errorMessage = "Server error. Please try again later."
+              errorMessage = "Server error. Please check the database connection and try again."
+            } else {
+              errorMessage = `Server returned error ${response.status}. Please try again later.`
             }
           }
 
@@ -788,22 +1153,68 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const data = await response.json()
-        console.log("[v0] Login response data:", data)
+        console.log("[v0] Login successful:", {
+          ...data,
+          token: data.token ? "[TOKEN_RECEIVED]" : "[NO_TOKEN]",
+        })
 
-        // Store token in localStorage
+        // Validate response data
+        if (!data.token) {
+          console.error("[v0] No token received from server")
+          passwordError.textContent = "Invalid server response. Please try again."
+          passwordError.style.visibility = "visible"
+          return
+        }
+
+        if (!data.user) {
+          console.error("[v0] No user data received from server")
+          passwordError.textContent = "Invalid server response. Please try again."
+          passwordError.style.visibility = "visible"
+          return
+        }
+
+        // Store authentication data
         localStorage.setItem("authToken", data.token)
         localStorage.setItem("user", JSON.stringify(data.user))
 
-        // Redirect immediately
-        window.location.href = "index.html"
+        console.log("[v0] Authentication data stored successfully")
+        console.log("[v0] Redirecting to home page...")
+
+        // Show success message briefly before redirect
+        if (submitButton) {
+          submitButton.textContent = "Success! Redirecting..."
+        }
+
+        // Redirect after a short delay to show success message
+        setTimeout(() => {
+          window.location.href = "index.html"
+        }, 500)
       } catch (error) {
-        console.error("[v0] Login error:", error)
+        console.error("[v0] Login network error:", error)
+        console.error("[v0] Error name:", error.name)
+        console.error("[v0] Error message:", error.message)
+        console.error("[v0] Error stack:", error.stack)
+
+        // Reset button state
+        const submitButton = form.querySelector('button[type="submit"]')
+        if (submitButton) {
+          submitButton.disabled = false
+          submitButton.textContent = "Sign In"
+        }
+
         let errorMessage = "Network error. Please try again."
 
         if (error.name === "TypeError" && error.message.includes("fetch")) {
-          errorMessage = "Cannot connect to server. Please ensure the backend server is running on port 5000."
+          errorMessage =
+            "Cannot connect to server. Please ensure:\n1. Backend server is running on port 5000\n2. No firewall is blocking the connection\n3. The server URL is correct"
         } else if (error.message.includes("CORS")) {
           errorMessage = "Server configuration error. Please check CORS settings."
+        } else if (error.message.includes("NetworkError")) {
+          errorMessage = "Network connection failed. Please check your internet connection."
+        } else if (error.name === "AbortError") {
+          errorMessage = "Request timed out. Please try again."
+        } else if (error.message.includes("Failed to fetch")) {
+          errorMessage = "Cannot connect to server. Please check if the backend server is running on port 5000."
         }
 
         passwordError.textContent = errorMessage
@@ -875,129 +1286,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     // Validation on submit
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault()
-      console.log("[v0] Signup form submitted")
-      let valid = true
-
-      // Clear previous errors
-      errors.forEach((s) => {
-        if (s) {
-          s.textContent = ""
-          s.style.visibility = "hidden"
-        }
-      })
-
-      if (!name.value.trim()) {
-        errors[0].textContent = "Full name is required."
-        errors[0].style.visibility = "visible"
-        name.setAttribute("aria-invalid", "true")
-        valid = false
-      }
-      if (!email.value.trim()) {
-        errors[1].textContent = "Email address is required."
-        errors[1].style.visibility = "visible"
-        email.setAttribute("aria-invalid", "true")
-        valid = false
-      }
-      if (!phone.value.trim()) {
-        errors[2].textContent = "Phone number is required."
-        errors[2].style.visibility = "visible"
-        phone.setAttribute("aria-invalid", "true")
-        valid = false
-      }
-      if (!password.value) {
-        errors[3].textContent = "Password is required."
-        errors[3].style.visibility = "visible"
-        password.setAttribute("aria-invalid", "true")
-        valid = false
-      }
-      if (!confirm.value) {
-        errors[4].textContent = "Please confirm your password."
-        errors[4].style.visibility = "visible"
-        confirm.setAttribute("aria-invalid", "true")
-        valid = false
-      } else if (password.value && confirm.value && password.value !== confirm.value) {
-        errors[4].textContent = "Passwords do not match."
-        errors[4].style.visibility = "visible"
-        confirm.setAttribute("aria-invalid", "true")
-        valid = false
-      }
-
-      if (!valid) {
-        const firstVisibleErr = errors.find((s) => s && s.textContent.trim())
-        if (firstVisibleErr) {
-          const inputToFocus = firstVisibleErr.parentElement.querySelector("input")
-          if (inputToFocus) inputToFocus.focus()
-        }
-        return
-      }
-
-      console.log("[v0] Attempting registration with data:", {
-        username: name.value.trim(),
-        email: email.value.trim(),
-        phone: phone.value.trim(),
-      })
-
-      // Call backend API for registration
-      try {
-        console.log("[v0] Making registration request to backend")
-        const response = await fetch("http://localhost:5000/api/auth/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: name.value.trim(),
-            email: email.value.trim(),
-            phone: phone.value.trim(),
-            password: password.value,
-          }),
-        })
-
-        console.log("[v0] Registration response status:", response.status)
-
-        if (!response.ok) {
-          // Try to get error message from response, but handle cases where response.json() fails
-          let errorMessage = "Registration failed"
-          try {
-            const data = await response.json()
-            errorMessage = data.error || errorMessage
-          } catch (jsonError) {
-            console.error("[v0] Failed to parse error response:", jsonError)
-            // Use status-based error messages when JSON parsing fails
-            if (response.status === 0) {
-              errorMessage = "Cannot connect to server. Please check if the backend is running."
-            } else if (response.status >= 500) {
-              errorMessage = "Server error. Please try again later."
-            } else if (response.status === 409) {
-              errorMessage = "Email already exists. Please use a different email."
-            }
-          }
-
-          errors[1].textContent = errorMessage
-          errors[1].style.visibility = "visible"
-          return
-        }
-
-        const data = await response.json()
-        console.log("[v0] Registration response data:", data)
-
-        // Redirect immediately
-        window.location.href = "Login.html"
-      } catch (error) {
-        console.error("[v0] Registration error:", error)
-        let errorMessage = "Network error. Please try again."
-
-        if (error.name === "TypeError" && error.message.includes("fetch")) {
-          errorMessage = "Cannot connect to server. Please ensure the backend server is running on port 5000."
-        } else if (error.message.includes("CORS")) {
-          errorMessage = "Server configuration error. Please check CORS settings."
-        }
-
-        errors[1].textContent = errorMessage
-        errors[1].style.visibility = "visible"
-      }
-    })
+    signupForm.addEventListener("submit", handleRegistration)
   }
 })
