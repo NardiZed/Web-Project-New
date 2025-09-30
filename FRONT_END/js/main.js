@@ -7,7 +7,7 @@ let selectedCategories = []
 let selectedPriceRanges = []
 
 // Cart functionality
-let cart = JSON.parse(localStorage.getItem("cart")) || []
+let cart = JSON.parse(localStorage.getItem("cart_items")) || []
 
 // Update cart counter in navigation
 function updateCartCounter() {
@@ -31,7 +31,7 @@ function updateCartCounter() {
   })
 }
 
-function handleCheckout() {
+async function handleCheckout() {
   console.log("[v0] Checkout button clicked")
 
   // Check if user is logged in
@@ -51,8 +51,60 @@ function handleCheckout() {
     return
   }
 
-  // User is logged in, proceed with checkout
-  alert("Proceeding to checkout... (This feature will be implemented soon)")
+  if (cart.length === 0) {
+    alert("Your cart is empty!")
+    return
+  }
+
+  // Confirm checkout
+  const confirmCheckout = confirm(
+    `You are about to checkout ${cart.length} item(s). Total: $${cart.reduce((sum, item) => sum + Number.parseFloat(item.price) * item.quantity, 0).toFixed(2)}. Continue?`,
+  )
+
+  if (!confirmCheckout) {
+    return
+  }
+
+  try {
+    console.log("[v0] Processing checkout...")
+
+    // Update quantities in database for each cart item
+    for (const item of cart) {
+      const response = await fetch(`http://localhost:5000/api/products/${item.id}/purchase`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          quantity: item.quantity,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `Failed to update product ${item.name}`)
+      }
+
+      console.log("[v0] Updated quantity for product:", item.id)
+    }
+
+    // Clear cart from localStorage
+    localStorage.removeItem("cart_items")
+    cart = []
+
+    // Update cart counter
+    updateCartCounter()
+
+    // Show success message
+    alert("Checkout successful! Thank you for your purchase.")
+
+    // Redirect to marketplace
+    window.location.href = "Marketplace.html"
+  } catch (error) {
+    console.error("[v0] Checkout error:", error)
+    alert("Checkout failed: " + error.message + "\nPlease try again or contact support.")
+  }
 }
 
 // Add product to cart (updated implementation with auth check)
@@ -90,16 +142,16 @@ function addToCart(productId) {
     cart.push({
       id: product.id,
       name: product.name,
+      description: product.description,
       price: product.price,
       category: product.category,
-      description: product.description,
       image_url: product.image_url,
       quantity: 1,
     })
   }
 
   // Save to localStorage
-  localStorage.setItem("cart", JSON.stringify(cart))
+  localStorage.setItem("cart_items", JSON.stringify(cart))
 
   // Update cart counter
   updateCartCounter()
@@ -112,7 +164,7 @@ function removeFromCart(productId) {
   console.log("[v0] Removing product from cart:", productId)
 
   cart = cart.filter((item) => item.id != productId)
-  localStorage.setItem("cart", JSON.stringify(cart))
+  localStorage.setItem("cart_items", JSON.stringify(cart))
 
   // Update cart counter
   updateCartCounter()
@@ -135,7 +187,7 @@ function updateCartQuantity(productId, newQuantity) {
   const item = cart.find((item) => item.id == productId)
   if (item) {
     item.quantity = newQuantity
-    localStorage.setItem("cart", JSON.stringify(cart))
+    localStorage.setItem("cart_items", JSON.stringify(cart))
     updateCartCounter()
 
     // Refresh cart display if on cart page
@@ -338,7 +390,7 @@ function initializeSellPage() {
 // Update navbar for auth state
 function updateNavbarForAuthState() {
   const authToken = localStorage.getItem("authToken")
-  const userData = localStorage.getItem("user")
+  const userData = localStorage.getItem("users")
   const loginLink = document.querySelector("nav ul li:last-child")
 
   if (authToken && userData) {
@@ -499,22 +551,30 @@ function displayProducts(products) {
   }
 
   cardsContainer.innerHTML = products
-    .map(
-      (product) => `
+    .map((product) => {
+      const stockQuantity = product.stock_quantity || 0
+      const stockClass = stockQuantity === 0 ? "out-of-stock" : stockQuantity < 10 ? "low-stock" : ""
+      const stockText = stockQuantity === 0 ? "Out of Stock" : `${stockQuantity} in stock`
+      const buttonDisabled = stockQuantity === 0 ? "disabled" : ""
+
+      return `
     <div class="product-card" data-category="${product.category}" data-price="${product.price}">
       <img src="${product.image_url || "/placeholder.svg?height=200&width=200"}" alt="${product.name}" loading="lazy">
       <h3>${product.name}</h3>
       <p class="category">${product.category}</p>
       <p class="price">$${Number.parseFloat(product.price).toFixed(2)}</p>
+      <p class="quantity ${stockClass}">${stockText}</p>
       <p class="description">${product.description || "No description available"}</p>
-      <button class="add-to-cart-btn" data-product-id="${product.id}">Add to cart</button>
+      <button class="add-to-cart-btn" data-product-id="${product.id}" ${buttonDisabled}>
+        ${stockQuantity === 0 ? "Out of Stock" : "Add to cart"}
+      </button>
     </div>
-  `,
-    )
+  `
+    })
     .join("")
 
   // Add event listeners to "Add to cart" buttons
-  const addToCartButtons = cardsContainer.querySelectorAll(".add-to-cart-btn")
+  const addToCartButtons = cardsContainer.querySelectorAll(".add-to-cart-btn:not([disabled])")
   addToCartButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
       const productId = e.target.getAttribute("data-product-id")
@@ -774,12 +834,11 @@ async function handleSellForm(event) {
 
   const formData = {
     name: document.getElementById("itemName").value.trim(),
-    price: document.getElementById("itemPrice").value,
+    price: Number.parseFloat(document.getElementById("itemPrice").value),
     description: document.getElementById("itemDescription").value.trim(),
     category: document.getElementById("itemCategory").value,
-    stock_quantity: document.getElementById("stockQuantity").value || 1,
+    stock_quantity: Number.parseInt(document.getElementById("stockQuantity").value) || 1,
     image_url: "/placeholder.svg?height=300&width=300", // Default placeholder
-    uploaded_file: uploadedFile ? uploadedFile.name : null,
   }
 
   // Basic validation
@@ -812,23 +871,44 @@ async function handleSellForm(event) {
   submitBtn.textContent = "Listing Item..."
 
   try {
-    // For now, we'll simulate the upload and save to database
+    // If file is uploaded, create a data URL for it
     if (uploadedFile) {
-      console.log("[v0] File to upload:", uploadedFile.name, uploadedFile.size, "bytes")
-      // TODO: Implement actual file upload to server/database
-      // const uploadedUrl = await uploadFileToServer(uploadedFile)
-      // formData.image_url = uploadedUrl
+      const reader = new FileReader()
+      const imageDataUrl = await new Promise((resolve, reject) => {
+        reader.onload = (e) => resolve(e.target.result)
+        reader.onerror = reject
+        reader.readAsDataURL(uploadedFile)
+      })
+      formData.image_url = imageDataUrl
     }
 
-    // Simulate API call (replace with actual backend call when available)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    console.log("[v0] Sending product data to backend:", formData)
 
-    console.log("[v0] Item listed successfully with data:", formData)
-    alert("Item listed successfully! Your image has been saved. Redirecting to marketplace...")
+    // Send to backend API
+    const response = await fetch("http://localhost:5000/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+      body: JSON.stringify(formData),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.error || `HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    console.log("[v0] Item listed successfully:", data)
+
+    alert("Item listed successfully! Redirecting to marketplace...")
+
+    // Redirect to marketplace after successful listing
     window.location.href = "Marketplace.html"
   } catch (error) {
     console.error("[v0] Error listing item:", error)
-    alert("Failed to list item: " + error.message)
+    alert("Failed to list item: " + error.message + "\nPlease ensure the backend server is running.")
   } finally {
     submitBtn.disabled = false
     submitBtn.textContent = "List Item"
@@ -1079,6 +1159,41 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("user", JSON.stringify(data.user))
 
         console.log("[v0] Authentication data stored successfully")
+
+        try {
+          console.log("[v0] Checking admin status...")
+          if (submitButton) {
+            submitButton.textContent = "Checking permissions..."
+          }
+
+          const adminCheckResponse = await fetch("http://localhost:5000/api/auth/check-admin", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${data.token}`,
+            },
+          })
+
+          if (adminCheckResponse.ok) {
+            const adminData = await adminCheckResponse.json()
+            console.log("[v0] Admin check result:", adminData)
+
+            if (adminData.isAdmin) {
+              console.log("[v0] User is admin, redirecting to Admin.html")
+              if (submitButton) {
+                submitButton.textContent = "Welcome Admin! Redirecting..."
+              }
+              setTimeout(() => {
+                window.location.href = "Admin.html"
+              }, 500)
+              return
+            }
+          }
+        } catch (adminCheckError) {
+          console.error("[v0] Error checking admin status:", adminCheckError)
+          // Continue with normal redirect if admin check fails
+        }
+
         console.log("[v0] Redirecting to home page...")
 
         // Show success message briefly before redirect

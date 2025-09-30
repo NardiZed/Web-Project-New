@@ -2,8 +2,16 @@ const express = require("express")
 const cors = require("cors")
 require("dotenv").config()
 
-const { registerUser, loginUser, authenticateToken } = require("./src/auth")
-const { getProducts, getProductById, getCategories, addProduct } = require("./src/products")
+const { registerUser, loginUser, authenticateToken, checkAdminStatus } = require("./src/auth")
+const {
+  getProducts,
+  getProductById,
+  getCategories,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+  getAllProductsAdmin,
+} = require("./src/products")
 
 const app = express()
 
@@ -66,12 +74,16 @@ app.get("/api/health", (req, res) => {
 // Authentication routes
 app.post("/api/auth/register", registerUser)
 app.post("/api/auth/login", loginUser)
+app.get("/api/auth/check-admin", authenticateToken, checkAdminStatus)
 
 // Products routes
 app.get("/api/products", getProducts)
 app.get("/api/products/:id", getProductById)
 app.get("/api/categories", getCategories)
 app.post("/api/products", authenticateToken, addProduct)
+app.put("/api/products/:id", authenticateToken, updateProduct)
+app.delete("/api/products/:id", authenticateToken, deleteProduct)
+app.get("/api/admin/products", authenticateToken, getAllProductsAdmin)
 
 // Protected route example
 app.get("/api/auth/profile", authenticateToken, (req, res) => {

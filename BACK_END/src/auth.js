@@ -156,8 +156,30 @@ const authenticateToken = (req, res, next) => {
   })
 }
 
+// Function to check if user is admin
+const checkAdminStatus = async (req, res) => {
+  try {
+    const userId = req.user.userId
+
+    console.log("[AUTH] Checking admin status for user:", userId)
+
+    const adminCheck = await pool.query("SELECT * FROM admins WHERE user_id = $1", [userId])
+
+    const isAdmin = adminCheck.rows.length > 0
+
+    res.json({
+      isAdmin,
+      role: isAdmin ? adminCheck.rows[0].role : "user",
+    })
+  } catch (error) {
+    console.error("[AUTH] Error checking admin status:", error)
+    res.status(500).json({ error: "Internal server error" })
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
   authenticateToken,
+  checkAdminStatus,
 }

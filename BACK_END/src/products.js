@@ -135,9 +135,127 @@ const addProduct = async (req, res) => {
   }
 }
 
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { name, description, price, category, image_url, stock_quantity, is_active } = req.body
+
+    // Validate required fields
+    if (!name || !price || !category) {
+      return res.status(400).json({
+        success: false,
+        error: "Name, price, and category are required",
+      })
+    }
+
+    const result = await pool.query(
+      "UPDATE products SET name = $1, description = $2, price = $3, category = $4, image_url = $5, stock_quantity = $6, is_active = $7 WHERE id = $8 RETURNING *",
+      [name, description, Number.parseFloat(price), category, image_url, stock_quantity || 0, is_active !== false, id],
+    )
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Product not found",
+      })
+    }
+
+    res.json({
+      success: true,
+      product: result.rows[0],
+      message: "Product updated successfully",
+    })
+  } catch (error) {
+    console.error("[PRODUCTS] Error updating product:", error)
+    res.status(500).json({
+      success: false,
+      error: "Failed to update product",
+      message: error.message,
+    })
+  }
+}
+
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    // Soft delete by setting is_active to false
+    const result = await pool.query("UPDATE products SET is_active = false WHERE id = $1 RETURNING *", [id])
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Product not found",
+      })
+    }
+
+    res.json({
+      success: true,
+      message: "Product deleted successfully",
+    })
+  } catch (error) {
+    console.error("[PRODUCTS] Error deleting product:", error)
+    res.status(500).json({
+      success: false,
+      error: "Failed to delete product",
+      message: error.message,
+    })
+  }
+}
+
+const getAllProductsAdmin = async (req, res) => {
+  try {
+    const { search, category } = req.query
+
+    let query = "SELECT * FROM products"
+    const queryParams = []
+    let paramCount = 0
+    const conditions = []
+
+    // Search by name or description
+    if (search) {
+      conditions.push(`(name ILIKE $${++paramCount} OR description ILIKE $${paramCount})`)
+      queryParams.push(`%${search}%`)
+    }
+
+    // Filter by category
+    if (category) {
+      conditions.push(`category = $${++paramCount}`)
+      queryParams.push(category)
+    }
+
+    if (conditions.length > 0) {
+      query += ` WHERE ${conditions.join(" AND ")}`
+    }
+
+    query += " ORDER BY created_at DESC"
+
+    console.log("[PRODUCTS] Admin query:", query)
+    console.log("[PRODUCTS] Query params:", queryParams)
+
+    const result = await pool.query(query, queryParams)
+
+    res.json({
+      success: true,
+      products: result.rows,
+      count: result.rows.length,
+    })
+  } catch (error) {
+    console.error("[PRODUCTS] Error fetching admin products:", error)
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch products",
+      message: error.message,
+    })
+  }
+}
+
 module.exports = {
   getProducts,
   getProductById,
   getCategories,
   addProduct,
+  updateProduct,
+  deleteProduct,
+  getAllProductsAdmin,
 }
