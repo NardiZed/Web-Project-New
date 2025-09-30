@@ -4,7 +4,7 @@ const pool = new Pool({
   user: process.env.DB_USER || "postgres",
   host: process.env.DB_HOST || "localhost",
   database: process.env.DB_NAME || "universal_market",
-  password: process.env.DB_PASSWORD || "password",
+  password: process.env.DB_PASSWORD || "1997",
   port: process.env.DB_PORT || 5432,
   max: 20, // maximum number of clients in the pool
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle
@@ -19,12 +19,12 @@ pool.on("error", (err, client) => {
   console.error("[DB] Unexpected error on idle client:", err)
 })
 
-pool.query("SELECT NOW()", (err, res) => {
+pool.query(`SELECT * FROM users`, (err, res) => {
   if (err) {
     console.error("[DB] Database connection failed:", err.message)
     console.error("[DB] Please check your database configuration and ensure PostgreSQL is running")
   } else {
-    console.log("[DB] Database connected successfully at:", res.rows[0].now)
+    console.log("[DB] Database connected successfully at:", res.rows)
   }
 })
 

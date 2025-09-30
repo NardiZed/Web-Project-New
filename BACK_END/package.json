@@ -1,7 +1,7 @@
 {
   "name": "back_end",
   "version": "1.0.0",
-  "description": "",
+  "description": "- Node.js (v14 or higher)\r - PostgreSQL (v12 or higher)\r - npm or yarn package manager",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

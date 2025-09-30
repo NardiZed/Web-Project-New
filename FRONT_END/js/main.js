@@ -7,7 +7,7 @@ let selectedCategories = []
 let selectedPriceRanges = []
 
 // Cart functionality
-let cart = JSON.parse(localStorage.getItem("cart")) || []
+let cart = JSON.parse(localStorage.getItem("cart_items")) || []
 
 // Update cart counter in navigation
 function updateCartCounter() {
@@ -90,16 +90,16 @@ function addToCart(productId) {
     cart.push({
       id: product.id,
       name: product.name,
+      description: product.description,
       price: product.price,
       category: product.category,
-      description: product.description,
       image_url: product.image_url,
       quantity: 1,
     })
   }
 
   // Save to localStorage
-  localStorage.setItem("cart", JSON.stringify(cart))
+  localStorage.setItem("cart_items", JSON.stringify(cart))
 
   // Update cart counter
   updateCartCounter()
@@ -112,7 +112,7 @@ function removeFromCart(productId) {
   console.log("[v0] Removing product from cart:", productId)
 
   cart = cart.filter((item) => item.id != productId)
-  localStorage.setItem("cart", JSON.stringify(cart))
+  localStorage.setItem("cart_items", JSON.stringify(cart))
 
   // Update cart counter
   updateCartCounter()
@@ -135,7 +135,7 @@ function updateCartQuantity(productId, newQuantity) {
   const item = cart.find((item) => item.id == productId)
   if (item) {
     item.quantity = newQuantity
-    localStorage.setItem("cart", JSON.stringify(cart))
+    localStorage.setItem("cart_items", JSON.stringify(cart))
     updateCartCounter()
 
     // Refresh cart display if on cart page
