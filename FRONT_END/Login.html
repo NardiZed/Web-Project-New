@@ -27,24 +27,21 @@
             <h1>Login Page</h1>
             <p>Login into your account to purchase</p>
             <form id="loginForm" method="GET" novalidate>
-                <div class="form-group" style="margin-bottom:0.5rem;">
-                     Made name field consistent with password field sizing 
-                    <input type="text" id="username" required placeholder="Enter your Email Address" style="width:80%; padding:10px; height:45px;">
-                    <br>
-                    <small class="error" aria-live="polite" style="color:#b00020;"></small>
+                <!-- Improved form layout with consistent styling -->
+                <div class="form-group">
+                    <input type="text" id="username" required placeholder="Enter your Email Address">
+                    <small class="error" aria-live="polite"></small>
                 </div>
 
-                <div class="form-group password-field" style="position:relative; display:inline-block; width:80%; margin-top:0.6rem;">
-                    <!-- Fixed password field to prevent icon overflow -->
-                    <input type="password" id="password" required placeholder="Enter your Password" style="width:100%; padding:10px; padding-right:45px; height:45px;">
-                    <i id="togglePassword" class="bx bx-hide" title="Show password" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; font-size:1.2rem; color:var(--primary-color);"></i>
-                    <br>
-                    <small class="error" aria-live="polite" style="color:#b00020;"></small>
+                <div class="form-group password-field">
+                    <input type="password" id="password" required placeholder="Enter your Password">
+                    <i id="togglePassword" class="bx bx-hide" title="Show password"></i>
+                    <small class="error" aria-live="polite"></small>
                 </div>
-                <br><br>
-                <button type="submit">Login</button>
+                
+                <button type="submit" class="login-btn">Login</button>
             </form>
-            <p>Don't have an account? <a href="Signup.html">Sign-Up</a></p>
+            <p class="signup-link">Don't have an account? <a href="Signup.html">Sign-Up</a></p>
         </div>
     </div>
     <footer>

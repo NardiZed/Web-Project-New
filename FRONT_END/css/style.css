@@ -190,11 +190,101 @@ nav ul li a:hover {
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(86, 71, 135, 0.2);
   transition: all 0.3s ease;
+  flex-shrink: 0;/*privent shrinking*/
 }
 
 .profile-btn:hover .profile-avatar {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(86, 71, 135, 0.3);
+}
+
+
+/* Fixed dropdown menu to not displace page content */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-width: 220px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-header {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(86, 71, 135, 0.1);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 0.95rem;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  opacity: 0.8;
+}
+
+.dropdown-divider {
+  margin: 0;
+  border: none;
+  border-top: 1px solid rgba(86, 71, 135, 0.1);
+}
+
+/* Made sign out button smaller and properly styled */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(86, 71, 135, 0.05);
+  color: var(--secondary-color);
+}
+
+.dropdown-item i {
+  font-size: 1.1rem;
+}
+
+.sign-out-item {
+  color: #dc3545;
+}
+
+.sign-out-item:hover {
+  background-color: rgba(220, 53, 69, 0.05);
+  color: #c82333;
 }
 
 /*==========================*/
@@ -291,7 +381,7 @@ nav ul li a:hover {
   max-width: 100%;
   object-fit: contain;
   margin-bottom: 1rem;
-  background-color: var(--secondary-color);
+  background-color: white;
   border-radius: 50%;
   padding: 20px;
 }
@@ -300,6 +390,7 @@ nav ul li a:hover {
   width: 150px !important;
   height: 150px !important;
   padding: 25px !important;
+  background-color: white !important;
 }
 
 .cards h3 {
@@ -499,6 +590,7 @@ nav ul li a:hover {
   object-fit: cover;
   border-radius: var(--border-radius);
   margin-bottom: 1rem;
+  background-color: white;
 }
 
 .Marketplace .product-card h3 {
@@ -551,11 +643,33 @@ nav ul li a:hover {
 /* Added sample product containers styling */
 .Marketplace .sample-products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   padding: 20px;
+  width: 100%;
 }
 
+/* Responsive breakpoints for sample products */
+@media (max-width: 1200px) {
+  .Marketplace .sample-products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .Marketplace .sample-products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Marketplace .sample-products {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+}
 .Marketplace .sample-product {
   background: white;
   border-radius: var(--border-radius);
@@ -577,7 +691,7 @@ nav ul li a:hover {
   object-fit: cover;
   border-radius: var(--border-radius);
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  background: white;
 }
 
 .Marketplace .sample-product h3 {
@@ -629,165 +743,317 @@ nav ul li a:hover {
 }
 
 /*==========================*/
-/* Login Page Design */
-
+/*==========================*/
+/* Login Page Styles - Improved layout and button styling */
 .Login .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  min-height: calc(100vh - 160px);
-  width: 100%;
-  margin-bottom: 5%;
-  padding: 20px;
+  min-height: calc(100vh - 200px);
+  padding: 40px 20px;
+  background: linear-gradient(135deg, rgba(86, 71, 135, 0.05), rgba(16, 25, 53, 0.05));
 }
 
-.Login .login-container > div {
-  padding: 20px;
-  box-shadow: var(--secondary-color) 0px 0px 10px 0px;
+.Login .login-form {
+  background: white;
+  padding: 40px;
   border-radius: var(--border-radius);
-  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+  box-shadow: 0 8px 30px rgba(86, 71, 135, 0.15);
+  max-width: 450px;
   width: 100%;
-  max-width: 500px;
-  min-height: 400px;
-  text-align: center;
 }
 
 .Login .login-form h1 {
-  margin-bottom: 20px;
-  color: var(--accent-color);
+  color: var(--primary-color);
+  font-size: 2rem;
   font-weight: 700;
-  font-size: 1.8rem;
-  word-wrap: break-word;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-.Login .login-form p {
+.Login .login-form > p {
+  color: var(--secondary-color);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+.Login .form-group {
   margin-bottom: 20px;
-  color: var(--nav-color);
-  font-weight: 300;
-  word-wrap: break-word;
+  position: relative;
 }
 
-/* Made password field same size as name field */
-.Login .login-form input[type="text"],
-.Login .login-form input[type="password"] {
+.Login .form-group input {
   width: 100%;
-  max-width: 80%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid var(--secondary-color);
+  padding: 12px 15px;
+  border: 2px solid rgba(86, 71, 135, 0.2);
   border-radius: var(--border-radius);
   font-size: 1rem;
-  box-sizing: border-box;
-  height: 45px; /* Consistent height for both fields */
+  transition: all 0.3s ease;
+  background: white;
 }
 
-.Login .login-form input[type="text"]:focus,
-.Login .login-form input[type="password"]:focus {
+.Login .form-group input:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 5px var(--bg-light);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(86, 71, 135, 0.1);
 }
 
-.Login .login-form .password-field {
+.Login .password-field {
   position: relative;
-  display: inline-block;
-  width: 100%;
-  max-width: 80%;
-  margin-top: 0.6rem;
 }
 
-.Login .login-form .password-field input {
-  width: 100%;
-  padding: 10px;
-  padding-right: 45px; /* Increased padding to prevent icon overflow */
-  height: 45px;
+.Login .password-field input {
+  padding-right: 45px;
 }
 
-.Login .login-form .password-field i {
+.Login .password-field i {
   position: absolute;
-  right: 12px; /* Adjusted position */
+  right: 15px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  font-size: 1.2rem;
-  color: var(--primary-color);
-  pointer-events: auto;
+  font-size: 1.3rem;
+  color: var(--secondary-color);
+  transition: color 0.3s ease;
 }
 
-/*==========================*/
+.Login .password-field i:hover {
+  color: var(--primary-color);
+}
 
-/* Sign-Up Page Design */
+.Login .form-group .error {
+  display: block;
+  color: #b00020;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  min-height: 20px;
+}
+
+.Login .login-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--primary-color);
+  color: white;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.Login .login-btn:hover {
+  background-color: transparent;
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(86, 71, 135, 0.2);
+}
+
+.Login .login-btn:active {
+  transform: translateY(0);
+}
+
+.Login .signup-link {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.Login .signup-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.Login .signup-link a:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+
+
+/*==========================*/
+/* Signup Page Styles matching Login Page */
 .Sign-Up .signup-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Changed from center to flex-start */
-  flex-direction: column;
-  min-height: calc(100vh - 70px); /* Ensures container is visible below nav */
-  margin-top: 40px; /* Adds space below nav */
-  margin-bottom: 5%;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 40px 20px;
+  background: linear-gradient(135deg, rgba(86, 71, 135, 0.05), rgba(16, 25, 53, 0.05));
 }
 
-.Sign-Up .signup-container > div {
-  padding: 20px;
-  box-shadow: var(--secondary-color) 0px 0px 10px 0px;
+.Sign-Up .signup-box {
+  background: white;
+  padding: 40px;
   border-radius: var(--border-radius);
-  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
-  width: 500px;
-  min-height: 75vh;
-  text-align: center;
-  margin: 0 auto; /* Center horizontally */
+  box-shadow: 0 8px 30px rgba(86, 71, 135, 0.15);
+  max-width: 450px;
+  width: 100%;
 }
 
-.Sign-Up .signup-container h1 {
-  margin-bottom: 20px;
-  color: var(--accent-color);
+.Sign-Up .signup-title {
+  color: var(--primary-color);
+  font-size: 2rem;
   font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-.Sign-Up .signup-container p {
+.Sign-Up .signup-subtitle {
+  color: var(--secondary-color);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+.Sign-Up .signup-form {
+  width: 100%;
+}
+
+.Sign-Up .signup-form-group {
   margin-bottom: 20px;
-  color: var(--accent-color);
-  font-weight: 300;
+  position: relative;
 }
 
-.Sign-Up .signup-container .form input[type="text"],
-.Sign-Up .signup-container .form input[type="password"] {
-  width: 80%;
-  padding: 7px 10px; /* Reduced height */
-  margin: 20px 0;
-  border: 1px solid var(--secondary-color);
+.Sign-Up .signup-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid rgba(86, 71, 135, 0.2);
   border-radius: var(--border-radius);
   font-size: 1rem;
-  height: 30px; /* Explicitly set a smaller height */
-  box-sizing: border-box;
+  transition: all 0.3s ease;
+  background: white;
 }
 
-.Sign-Up .signup-container .form input[type="text"]:focus,
-.Sign-Up .signup-container .form input[type="password"]:focus {
+.Sign-Up .signup-input:focus {
   outline: none;
-  border-color: var(--accent-color);
-  box-shadow: 0 0 5px var(--accent-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(86, 71, 135, 0.1);
 }
 
-.Sign-Up .signup-container .form button {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background-color: var(--accent-color);
-  border: 1px solid transparent;
+.Sign-Up .signup-password-group {
+  position: relative;
+}
+
+.Sign-Up .signup-password-input {
+  padding-right: 45px;
+}
+
+.Sign-Up .signup-password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: var(--secondary-color);
+  transition: color 0.3s ease;
+}
+
+.Sign-Up .signup-password-toggle:hover {
   color: var(--primary-color);
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  transition: all 0.5s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.Sign-Up .signup-container .form button:hover {
+.Sign-Up .signup-form-group .error {
+  display: block;
+  color: #b00020;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  min-height: 20px;
+}
+
+.Sign-Up .signup-button {
+  width: 100%;
+  padding: 14px;
   background-color: var(--primary-color);
-  color: var(--accent-color);
+  color: white;
   border: 2px solid var(--primary-color);
-  transform: scale(1.05);
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.Sign-Up .signup-button:hover {
+  background-color: transparent;
+  color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(86, 71, 135, 0.2);
+}
+
+.Sign-Up .signup-button:active {
+  transform: translateY(0);
+}
+
+.Sign-Up .signup-footer-text {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.Sign-Up .signup-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.Sign-Up .signup-link:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+
+/* Responsive styles for signup page */
+@media (max-width: 768px) {
+  .Sign-Up .signup-container {
+    padding: 20px 15px;
+    min-height: calc(100vh - 160px);
+  }
+
+  .Sign-Up .signup-box {
+    padding: 30px 25px;
+  }
+
+  .Sign-Up .signup-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .Sign-Up .signup-container {
+    padding: 15px 10px;
+  }
+
+  .Sign-Up .signup-box {
+    padding: 25px 20px;
+  }
+
+  .Sign-Up .signup-title {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  .Sign-Up .signup-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  .Sign-Up .signup-input {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+
+  .Sign-Up .signup-button {
+    padding: 12px;
+    font-size: 1rem;
+  }
 }
 
 /*==========================*/
@@ -846,7 +1112,10 @@ nav ul li a:hover {
 .Sell form select {
   width: 100%;
   padding: 8px 12px;
+  .Marketplace .products-header {
+  padding: 0 20px;
   margin-bottom: 1rem;
+  margin-bottom: 1rem;}
   border: 1px solid var(--secondary-color);
   border-radius: var(--border-radius);
   font-size: 1rem;
@@ -898,9 +1167,11 @@ nav ul li a:hover {
 }
 
 .Sell .drag-drop-content svg {
+  .Marketplace .products-header h2 {
   color: var(--primary-color);
-  margin-bottom: 0.5rem;
-}
+}}
+
+
 
 .Sell .drag-drop-text {
   font-weight: 600;
@@ -1069,10 +1340,11 @@ nav ul li a:hover {
 }
 
 .item-details .category {
+  .Marketplace .products-header .products-count {
   color: var(--secondary-color);
   font-size: 0.9rem;
-  margin-bottom: 0.3rem;
-}
+  margin-top: 0.5rem;
+}}
 
 .item-details .price {
   color: var(--primary-color);
@@ -1100,22 +1372,25 @@ nav ul li a:hover {
   box-shadow: 0 1px 3px rgba(86, 71, 135, 0.1);
 }
 
-.quantity-btn {
+.quantity-btn .Marketplace .filter-apply-btn{
   background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 600;
+  /* Added filter button styling */
   font-size: 1rem;
   box-shadow: 0 1px 3px rgba(16, 25, 53, 0.2);
   line-height: 1;
+}
+
+.Marketplace .filter-apply-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .quantity-btn:hover {
@@ -1196,10 +1471,15 @@ nav ul li a:hover {
   font-weight: 600;
   transition: all 0.3s ease;
   display: inline-block;
+  width: 100%;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(86, 71, 135, 0.2);
 }
 
 .continue-shopping-btn:hover {
   background: var(--secondary-color);
+  .Marketplace .filter-apply-btn:hover {
+  background-color: var(--secondary-color);}
   transform: translateY(-2px);
   text-decoration: none;
   color: white;
@@ -1212,6 +1492,7 @@ nav ul li a:hover {
   padding: 1.5rem;
   margin-top: 2rem;
   border-left: 4px solid var(--primary-color);
+   box-shadow: 0 4px 12px rgba(86, 71, 135, 0.3);
 }
 
 .summary-row {
@@ -1229,6 +1510,8 @@ nav ul li a:hover {
   font-weight: 700;
   font-size: 1.3rem;
   color: var(--primary-color);
+  .Marketplace .filter-apply-btn:active {
+  transform: translateY(0);}
 }
 
 /* Responsive cart layout */
@@ -1451,7 +1734,31 @@ footer::before {
 }
 
 @media (max-width: 768px) {
+  /* Profile dropdown responsive */
+  .profile-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .dropdown-menu {
+    min-width: 200px;
+    right: -10px;
+  }
+
   /* Marketplace responsive fixes */
+   .Marketplace .Aside {
+    width: 100%;
+    order: 2;
+  }
+
+  .Marketplace .main-body {
+    order: 1;
+  }
+
+  .Marketplace .products-header {
+    padding: 0 15px;
+  }
   .Marketplace .search-container {
     flex-direction: column;
   }
@@ -1477,6 +1784,12 @@ footer::before {
     padding: 15px;
   }
 
+  .Marketplace .sample-products {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 15px;
+  }
+
   /* Login responsive fixes */
   .Login .login-container {
     padding: 15px;
@@ -1494,9 +1807,30 @@ footer::before {
 }
 
 @media (max-width: 480px) {
+
+/* Profile dropdown for very small screens */
+  .profile-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+
+  .profile-btn {
+    padding: 0.3rem 0.6rem;
+  }
+
+  .dropdown-menu {
+    min-width: 180px;
+    right: -20px;
+  }
+
   /* Small screen marketplace fixes */
   .Marketplace .Aside {
     padding: 15px;
+  }
+
+  .Marketplace .products-header {
+    padding: 0 10px;
   }
 
   .Marketplace .search-section h3,
@@ -1506,6 +1840,11 @@ footer::before {
   }
 
   .Marketplace .cards {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+
+  .Marketplace .sample-products {
     grid-template-columns: 1fr;
     padding: 10px;
   }

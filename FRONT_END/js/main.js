@@ -7,7 +7,7 @@ let selectedCategories = []
 let selectedPriceRanges = []
 
 // Cart functionality
-let cart = JSON.parse(localStorage.getItem("cart_items")) || []
+let cart = JSON.parse(localStorage.getItem("cart")) || []
 
 // Update cart counter in navigation
 function updateCartCounter() {
@@ -90,16 +90,16 @@ function addToCart(productId) {
     cart.push({
       id: product.id,
       name: product.name,
-      description: product.description,
       price: product.price,
       category: product.category,
+      description: product.description,
       image_url: product.image_url,
       quantity: 1,
     })
   }
 
   // Save to localStorage
-  localStorage.setItem("cart_items", JSON.stringify(cart))
+  localStorage.setItem("cart", JSON.stringify(cart))
 
   // Update cart counter
   updateCartCounter()
@@ -112,7 +112,7 @@ function removeFromCart(productId) {
   console.log("[v0] Removing product from cart:", productId)
 
   cart = cart.filter((item) => item.id != productId)
-  localStorage.setItem("cart_items", JSON.stringify(cart))
+  localStorage.setItem("cart", JSON.stringify(cart))
 
   // Update cart counter
   updateCartCounter()
@@ -135,7 +135,7 @@ function updateCartQuantity(productId, newQuantity) {
   const item = cart.find((item) => item.id == productId)
   if (item) {
     item.quantity = newQuantity
-    localStorage.setItem("cart_items", JSON.stringify(cart))
+    localStorage.setItem("cart", JSON.stringify(cart))
     updateCartCounter()
 
     // Refresh cart display if on cart page
@@ -571,8 +571,11 @@ async function initializeMarketplace() {
 function updateSelectedCount() {
   const countSpan = document.getElementById("selectedCount")
   if (countSpan) {
-    const totalSelected = selectedCategories.length + selectedPriceRanges.length
+    const categoryCheckboxes = document.querySelectorAll('.Categories .check-list input[type="checkbox"]:checked')
+    const priceCheckboxes = document.querySelectorAll('.Categories + div .check-list input[type="checkbox"]:checked')
+    const totalSelected = categoryCheckboxes.length + priceCheckboxes.length
     countSpan.textContent = `${totalSelected} selected`
+    console.log("[v0] Updated selection count:", totalSelected)
   }
 }
 
@@ -647,9 +650,10 @@ async function applyFilters() {
   selectedCategories = []
 
   categoryCheckboxes.forEach((checkbox) => {
-    const label = checkbox.nextElementSibling
+    const label = checkbox.parentElement
     if (label && label.tagName === "LABEL") {
-      selectedCategories.push(label.textContent.trim())
+      const labelText = label.textContent.trim()
+      selectedCategories.push(labelText)
     }
   })
 
@@ -658,9 +662,10 @@ async function applyFilters() {
   selectedPriceRanges = []
 
   priceCheckboxes.forEach((checkbox) => {
-    const label = checkbox.nextElementSibling
+    const label = checkbox.parentElement
     if (label && label.tagName === "LABEL") {
-      selectedPriceRanges.push(label.textContent.trim())
+      const labelText = label.textContent.trim()
+      selectedPriceRanges.push(labelText)
     }
   })
 
@@ -854,7 +859,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("[v0] Adding listener to category checkbox:", checkbox.id)
       checkbox.addEventListener("change", (e) => {
         console.log("[v0] Category checkbox changed:", e.target.id, e.target.checked)
-        applyFilters()
+        updateSelectedCount() // Update counter on change
       })
     })
 
@@ -863,7 +868,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("[v0] Adding listener to price checkbox:", checkbox.id)
       checkbox.addEventListener("change", (e) => {
         console.log("[v0] Price checkbox changed:", e.target.id, e.target.checked)
-        applyFilters()
+        updateSelectedCount() // Update counter on change
       })
     })
 
